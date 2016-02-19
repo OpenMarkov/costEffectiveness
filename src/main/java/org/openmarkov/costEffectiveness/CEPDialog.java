@@ -189,9 +189,9 @@ public class CEPDialog extends JDialog {
     private enum CEPColumns {
         LAMBDA_INF(0, "\u03BB inf."),
         LAMBDA_SUP(1, "\u03BB sup."),
-        COST(2, "Cost"),
-        EFFECTIVENESS(3, "Effectiveness"),
-        INTERVENTION(4, "Intervention");
+        COST(2, StringDatabase.getUniqueInstance().getString("CostEffectivenessResults.Cost")),
+        EFFECTIVENESS(3, StringDatabase.getUniqueInstance().getString("CostEffectivenessResults.Effectiveness")),
+        INTERVENTION(4, StringDatabase.getUniqueInstance().getString("CostEffectivenessResults.Intervention"));
     	
     	private String text;
     	private int index;

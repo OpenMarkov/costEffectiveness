@@ -90,7 +90,7 @@ public class CEDecisionResults extends JDialog {
     private GTablePotential gtablePotentialResult;
 
     /**
-     * Compacted? Thresholds? TODO - Check
+     * Compacted? Thresholds?
      */
     private List<Double> thresholdList;
 
@@ -164,8 +164,7 @@ public class CEDecisionResults extends JDialog {
      * Set title, icon and contentPane
      */
     private void initialize() {
-        // TODO - Localize
-        this.setTitle("OpenMarkov - " + StringDatabase.getUniqueInstance().getString("SensitivityAnalysis.Title") + " - " + probNet.getName());
+        this.setTitle("OpenMarkov - " + stringDatabase.getString("CostEffectivenessResults.Title.Label") + " - " + probNet.getName());
         this.setIconImage(OpenMarkovLogoIcon.getUniqueInstance().getOpenMarkovLogoIconImage16());
         setContentPane(getJContentPane());
         pack();
@@ -189,9 +188,9 @@ public class CEDecisionResults extends JDialog {
     private JTabbedPane getTabbedPane() {
         if (tabbedPane == null) {
             tabbedPane = new JTabbedPane();
-            // TODO - LOCALIZE
-            tabbedPane.addTab("ANALISIS!!!", null, getAnalysisPanel(), null);
-            tabbedPane.addTab("PLANO_CE",null, getCEPlane(), null);
+            tabbedPane.addTab(stringDatabase.getString("CostEffectivenessResults.Analysis.Tab"),
+                    null, getAnalysisPanel(), null);
+            tabbedPane.addTab(stringDatabase.getString("CostEffectivenessResults.Plane.Tab"),null, getCEPlane(), null);
         }
         return tabbedPane;
     }
@@ -249,8 +248,7 @@ public class CEDecisionResults extends JDialog {
 
         // If there are more than one interval, is necessary get the compact intervals and paint it into the panel
         if (moreThanOneInterval) {
-            // TODO - Localize
-            intervalsPanel.setBorder(new TitledBorder("Intervals"));
+            intervalsPanel.setBorder(new TitledBorder(stringDatabase.getString("CostEffectivenessResults.Intervals.Label")));
             intervalsPanel.setLayout(new BoxLayout(intervalsPanel, BoxLayout.PAGE_AXIS));
 
             thresholdList = new ArrayList<>(thresholds);
@@ -307,7 +305,6 @@ public class CEDecisionResults extends JDialog {
      */
     public JPanel getTablePanel() {
         tablePanel = new JPanel();
-        tablePanel.setName("tablePanel");
         tablePanel.add(new JScrollPane(getTable()));
         return tablePanel;
     }
@@ -391,16 +388,6 @@ public class CEDecisionResults extends JDialog {
             }
         });
 
-//        DefaultTableModel tableModel = new DefaultTableModel() {
-//
-//            @Override
-//            public boolean isCellEditable(int row, int column) {
-//                return false;
-//            }
-//        };
-//
-//        jtable.setModel(tableModel);
-
         DefaultCellEditor notEditableCellEditor = new DefaultCellEditor(new JTextField()){
             @Override
             public boolean isCellEditable(EventObject anEvent) {
@@ -433,18 +420,17 @@ public class CEDecisionResults extends JDialog {
      */
     public String[] getColumns() {
         String[] columnNames;
-        // TODO - Localize
         if (hasInterventions) {
             columnNames = new String[4];
-            columnNames[0] =  decisionVariable.getBaseName();
-            columnNames[1] = "cost";
-            columnNames[2] = "effectiveness";
+            columnNames[0] = decisionVariable.getBaseName();
+            columnNames[1] = stringDatabase.getString("CostEffectivenessResults.Cost");
+            columnNames[2] = stringDatabase.getString("CostEffectivenessResults.Effectiveness");
             columnNames[3] = "intervention";
         } else {
             columnNames = new String[3];
-            columnNames[0] =  decisionVariable.getBaseName();
-            columnNames[1] = "cost";
-            columnNames[2] = "effectiveness";
+            columnNames[0] = decisionVariable.getBaseName();
+            columnNames[1] = stringDatabase.getString("CostEffectivenessResults.Cost");
+            columnNames[2] = stringDatabase.getString("CostEffectivenessResults.Effectiveness");
         }
 
         return columnNames;
@@ -469,13 +455,12 @@ public class CEDecisionResults extends JDialog {
      */
     public JPanel getAbsoluteRelativePanel(){
         JPanel absoluteRelativePanel = new JPanel();
-        // TODO - LOCALIZE
-        absoluteRelativePanel.setBorder(new TitledBorder("Display:"));
+        absoluteRelativePanel.setBorder(new TitledBorder(stringDatabase.getString("CostEffectivenessResults.Controls.Display")));
         absoluteRelativePanel.setLayout(new BoxLayout(absoluteRelativePanel, BoxLayout.PAGE_AXIS));
 
         ButtonGroup buttonGroup = new ButtonGroup();
-        absoluteRadioButton = new JRadioButton("Absolute");
-        relativeRadioButton = new JRadioButton("Relative to:");
+        absoluteRadioButton = new JRadioButton(stringDatabase.getString("CostEffectivenessResults.Controls.Absolute"));
+        relativeRadioButton = new JRadioButton(stringDatabase.getString("CostEffectivenessResults.Controls.Relative"));
         absoluteRadioButton.setSelected(true);
         absoluteRadioButton.addActionListener(new ActionListener() {
             @Override
@@ -530,8 +515,7 @@ public class CEDecisionResults extends JDialog {
      */
     public JScrollPane getShowHidePanel(){
         JPanel showHidePanel = new JPanel();
-        // TODO - LOCALIZE
-        showHidePanel.setBorder(new TitledBorder("Show/hide interventions"));
+        showHidePanel.setBorder(new TitledBorder(stringDatabase.getString("CostEffectivenessResults.Controls.ShowHide")));
         showHidePanel.setLayout(new BoxLayout(showHidePanel, BoxLayout.PAGE_AXIS));
 
         showHideCheckBoxes = new ArrayList();
@@ -657,11 +641,10 @@ public class CEDecisionResults extends JDialog {
         }
 
         // Set the JFreeChart parameters call
-        // TODO - LOCALIZE
         JFreeChart chart = ChartFactory.createScatterPlot(
-                "Cost-effectiveness plane", // Chart title
-                "Effectiveness",                                                    // X axis label
-                "Cost",                                               // Y axis label
+                stringDatabase.getString("CostEffectivenessResults.Plane.Label"),   // Chart title
+                stringDatabase.getString("CostEffectivenessResults.Effectiveness"), // X axis label
+                stringDatabase.getString("CostEffectivenessResults.Cost"),          // Y axis label
                 dataset,                                            // data
                 PlotOrientation.VERTICAL,                            // Orientation
                 true,                                                // Legend
