@@ -2,6 +2,7 @@
 <properties>
     <CostEffectivenessDeterministic>
         <Label value="Deterministic cost-effectiveness analysis"/>
+		<Error value="Error while trying to perform cost-effectiveness analysis"/>
     </CostEffectivenessDeterministic>
 	<CostEffectivenessResults>
 		<Title>

@@ -6,6 +6,7 @@ import org.openmarkov.core.exception.UnexpectedInferenceException;
 import org.openmarkov.core.gui.dialog.inference.common.InferenceOptionsDialog;
 import org.openmarkov.core.gui.dialog.inference.common.ScopeSelectorPanel;
 import org.openmarkov.core.gui.dialog.inference.common.ScopeType;
+import org.openmarkov.core.gui.localize.StringDatabase;
 import org.openmarkov.core.gui.plugin.ToolPlugin;
 import org.openmarkov.core.gui.window.MainPanel;
 import org.openmarkov.core.inference.MulticriteriaOptions;
@@ -61,9 +62,8 @@ public class CostEffectivenessFrame extends JFrame {
             } catch (NotEvaluableNetworkException e) {
                 JOptionPane.showMessageDialog(
                         null,
-                        "Error while trying to perform cost-effectiveness analysis.\n"
-                                + e.getMessage()
-                                + "\nCheck the message window for further details.");
+                        StringDatabase.getUniqueInstance().getString("CostEffectivenessDeterministic.Error")
+                                + e.getMessage());
                 e.printStackTrace();
             } catch (IncompatibleEvidenceException | UnexpectedInferenceException e) {
                 e.printStackTrace();

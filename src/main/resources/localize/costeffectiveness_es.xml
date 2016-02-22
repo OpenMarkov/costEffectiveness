@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <properties>
     <CostEffectivenessDeterministic>
-        <Label value="Deterministic cost-effectiveness analysis"/>
+        <Label value="Análisis de coste-efectividad determinista"/>
+		<Error value="Error al realizar el análisis de coste-efectividad"/>
     </CostEffectivenessDeterministic>
 	<CostEffectivenessResults>
 		<Title>
