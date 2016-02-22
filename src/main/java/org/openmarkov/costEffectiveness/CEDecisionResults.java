@@ -100,13 +100,17 @@ public class CEDecisionResults extends JDialog {
     private JRadioButton absoluteRadioButton;
     private JRadioButton relativeRadioButton;
     private JComboBox<State> relativeDecisionSelector;
-    private List<JCheckBox> showHideCheckBoxes;
+    private List<JCheckBox> cePlaneShowHideCheckBoxes;
+    private List<JCheckBox> frontierInterventionsShowHideCheckBoxes;
     private ChartPanel ceChartPanel;
-    private JPanel cePlanePanel;
     private List<JRadioButton> analysisThresholdsRadioButtons;
     private List<JRadioButton> cePlanethresholdsRadioButtons;
-    private JPanel tablePanel;
+    private List<JRadioButton> frontierInterventionsthresholdsRadioButtons;
+    private JPanel analysisTablePanel;
     private JPanel analysisPanel;
+    private JPanel cePlanePanel;
+    private JPanel frontierInterventionsPanel;
+    private JPanel frontierInterventionsTablePanel;
     private final int COLUMN_STATE_NAME = 0;
     private final int COLUMN_COST = 1;
     private final int COLUMN_EFFECTIVENESS = 2;
@@ -116,7 +120,8 @@ public class CEDecisionResults extends JDialog {
 
     private enum AnalysisTab {
         ANALYSIS,
-        CEPLANE
+        CEPLANE,
+        FRONTIER_INTERVENTIONS
     }
 
     public CEDecisionResults(Window owner, ProbNet probNet, EvidenceCase evidenceCase, Variable decisionVariable){
@@ -190,7 +195,10 @@ public class CEDecisionResults extends JDialog {
             tabbedPane = new JTabbedPane();
             tabbedPane.addTab(stringDatabase.getString("CostEffectivenessResults.Analysis.Tab"),
                     null, getAnalysisPanel(), null);
-            tabbedPane.addTab(stringDatabase.getString("CostEffectivenessResults.Plane.Tab"),null, getCEPlane(), null);
+            tabbedPane.addTab(stringDatabase.getString("CostEffectivenessResults.Plane.Tab"),null, getCEPlanePanel(), null);
+
+            tabbedPane.addTab(stringDatabase.getString("CostEffectivenessResults.FrontierInterventions.Tab"),
+                    null, getFrontierInterventionsPanel(), null);
         }
         return tabbedPane;
     }
@@ -203,7 +211,7 @@ public class CEDecisionResults extends JDialog {
         analysisPanel = new JPanel();
         analysisPanel.setLayout(new BorderLayout());
         analysisPanel.add(getIntervalsPanel(AnalysisTab.ANALYSIS), BorderLayout.WEST);
-        analysisPanel.add(getTablePanel(), BorderLayout.CENTER);
+        analysisPanel.add(getAnalysisTablePanel(), BorderLayout.CENTER);
         return analysisPanel;
     }
 
@@ -211,14 +219,28 @@ public class CEDecisionResults extends JDialog {
      * Gets the cost-effectiveness plane
      * @return
      */
-    public JPanel getCEPlane() {
+    public JPanel getCEPlanePanel() {
         cePlanePanel = new JPanel();
         cePlanePanel.setLayout(new BorderLayout());
         cePlanePanel.add(getIntervalsPanel(AnalysisTab.CEPLANE), BorderLayout.WEST);
-        cePlanePanel.add(getAbsRelShowHidePanel(), BorderLayout.EAST);
+        cePlanePanel.add(getAbsRelShowHidePanel(AnalysisTab.CEPLANE), BorderLayout.EAST);
         cePlanePanel.add(getCEPlaneChartPanel(), BorderLayout.CENTER);
 
         return cePlanePanel;
+    }
+
+    /**
+     * Gets the frontier interventions panel
+     * @return
+     */
+    public JPanel getFrontierInterventionsPanel() {
+        frontierInterventionsPanel = new JPanel();
+        frontierInterventionsPanel.setLayout(new BorderLayout());
+        frontierInterventionsPanel.add(getIntervalsPanel(AnalysisTab.FRONTIER_INTERVENTIONS), BorderLayout.WEST);
+        frontierInterventionsPanel.add(getShowHidePanel(AnalysisTab.FRONTIER_INTERVENTIONS), BorderLayout.EAST);
+        frontierInterventionsPanel.add(getFrontierInterventionsTablePanel(), BorderLayout.CENTER);
+
+        return frontierInterventionsPanel;
     }
 
     /**
@@ -287,6 +309,8 @@ public class CEDecisionResults extends JDialog {
                 analysisThresholdsRadioButtons = thresholdsRadioButtons;
             } else if ( analysisTab == AnalysisTab.CEPLANE){
                 cePlanethresholdsRadioButtons = thresholdsRadioButtons;
+            } else if (analysisTab == AnalysisTab.FRONTIER_INTERVENTIONS) {
+                frontierInterventionsthresholdsRadioButtons = thresholdsRadioButtons;
             }
 
         } else {
@@ -303,17 +327,132 @@ public class CEDecisionResults extends JDialog {
      * Get the Panel with the JTable
      * @return
      */
-    public JPanel getTablePanel() {
-        tablePanel = new JPanel();
-        tablePanel.add(new JScrollPane(getTable()));
-        return tablePanel;
+    public JPanel getAnalysisTablePanel() {
+        analysisTablePanel = new JPanel();
+        analysisTablePanel.add(new JScrollPane(getAnalysisTable()));
+        return analysisTablePanel;
+    }
+
+    /**
+     * Get the Panel with the JTable
+     * @return
+     */
+    public JPanel getFrontierInterventionsTablePanel() {
+        frontierInterventionsTablePanel = new JPanel();
+        frontierInterventionsTablePanel.add(new JScrollPane(getFrontierInterventionsTable()));
+        return frontierInterventionsTablePanel;
     }
 
     /**
      * Get the table with the CEPs
      * @return
      */
-    public JTable getTable(){
+    public JTable getAnalysisTable(){
+        // Add one for the header
+        int numRows = decisionVariable.getNumStates();
+        int numColumns = getColumns().length;
+        // Set data in jTable
+        Object[][] values = new Object[numRows][numColumns];
+
+//        //Set header values
+//        for (int column = 0; column < numColumns; column++){
+//            values[0][column] = getColumns()[column];
+//        }
+
+        for (int row = 0; row < numRows; row++){
+            // Set decision variable state name
+            values[row][COLUMN_STATE_NAME] = decisionVariable.getStateName(row);
+
+            // Set costs and effectiveness for that decision state
+            values[row][COLUMN_COST] = cepsForDecision[row].getCost(selectedMinThreshold + (selectedMaxThreshold-selectedMinThreshold)/2);
+            values[row][COLUMN_EFFECTIVENESS] = cepsForDecision[row].getEffectiveness(selectedMinThreshold + (selectedMaxThreshold-selectedMinThreshold)/2);
+            if (hasInterventions) {
+                values[row][COLUMN_INTERVENTION] = cepsForDecision[row].getIntervention(selectedMinThreshold + (selectedMaxThreshold - selectedMinThreshold) / 2);
+            }
+        }
+
+        final JTable jtable = new JTable(values, getColumns()) {
+            @Override
+            public void doLayout()
+            {
+                if (tableHeader != null)
+                {
+                    TableColumn resizingColumn = tableHeader.getResizingColumn();
+                    //  Viewport size changed. Increase last columns width
+
+                    if (resizingColumn == null)
+                    {
+                        TableColumnModel tcm = getColumnModel();
+                        int lastColumn = tcm.getColumnCount() - 1;
+                        tableHeader.setResizingColumn( tcm.getColumn( lastColumn ) ) ;
+                    }
+                }
+
+                super.doLayout();
+            }
+
+            public boolean getScrollableTracksViewportWidth()
+            {
+                return getPreferredSize().width < getParent().getWidth();
+            }
+        };
+
+        jtable.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent event) {
+                int row = jtable.rowAtPoint(event.getPoint());
+                int column = jtable.columnAtPoint(event.getPoint());
+                if (column == COLUMN_INTERVENTION) {
+                    Intervention intervention = cepsForDecision[row].getIntervention(
+                            selectedMinThreshold + (selectedMaxThreshold - selectedMinThreshold) / 2);
+
+                    if (intervention != null) {
+                        InterventionDialog interventionDialog = null;
+                        try {
+                            interventionDialog = new InterventionDialog(getOwner(),
+                                    probNet,
+                                    intervention);
+                        } catch (IncompatibleEvidenceException e) {
+                            e.printStackTrace();
+                        } catch (UnexpectedInferenceException e) {
+                            e.printStackTrace();
+                        }
+                        interventionDialog.setVisible(true);
+                    }
+                }
+            }
+        });
+
+        DefaultCellEditor notEditableCellEditor = new DefaultCellEditor(new JTextField()){
+            @Override
+            public boolean isCellEditable(EventObject anEvent) {
+                return false;
+            }
+        };
+
+        for (int columnIndex = 0 ; columnIndex < jtable.getColumnModel().getColumnCount(); columnIndex++){
+            jtable.getColumnModel().getColumn(columnIndex).setCellEditor(notEditableCellEditor);
+        }
+
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+        headerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        jtable.getTableHeader().setDefaultRenderer(headerRenderer);
+        // Set colors in jTable
+        DefaultTableCellRenderer renderer =	new DefaultTableCellRenderer();
+        renderer.setBackground(Color.decode(CLICKABLE_COLUMN_COLOR));
+
+        if (hasInterventions) {
+            jtable.getColumnModel().getColumn(COLUMN_INTERVENTION).setCellRenderer(renderer);
+        }
+
+
+        return jtable;
+    }
+
+    /**
+     * Get the table with the CEPs
+     * @return
+     */
+    public JTable getFrontierInterventionsTable(){
         // Add one for the header
         int numRows = decisionVariable.getNumStates();
         int numColumns = getColumns().length;
@@ -440,11 +579,11 @@ public class CEDecisionResults extends JDialog {
      * Build the right column with both panels
      * @return
      */
-    public JPanel getAbsRelShowHidePanel() {
+    public JPanel getAbsRelShowHidePanel(AnalysisTab analysisTab) {
         JPanel absRelShowHidePanel = new JPanel();
         absRelShowHidePanel.setLayout(new BorderLayout());
         absRelShowHidePanel.add(getAbsoluteRelativePanel(), BorderLayout.NORTH);
-        absRelShowHidePanel.add(getShowHidePanel(),BorderLayout.SOUTH);
+        absRelShowHidePanel.add(getShowHidePanel(analysisTab),BorderLayout.SOUTH);
 
         return absRelShowHidePanel;
     }
@@ -513,12 +652,13 @@ public class CEDecisionResults extends JDialog {
      * Returns the scroll pane with the show/hide functionality
      * @return
      */
-    public JScrollPane getShowHidePanel(){
+    public JScrollPane getShowHidePanel(AnalysisTab analysisTab){
         JPanel showHidePanel = new JPanel();
         showHidePanel.setBorder(new TitledBorder(stringDatabase.getString("CostEffectivenessResults.Controls.ShowHide")));
         showHidePanel.setLayout(new BoxLayout(showHidePanel, BoxLayout.PAGE_AXIS));
 
-        showHideCheckBoxes = new ArrayList();
+        ArrayList<JCheckBox> checkBoxesList = new ArrayList();
+
         for(State state :decisionVariable.getStates()){
             JCheckBox stateCheckbox = new JCheckBox(state.getName());
             stateCheckbox.addActionListener(new ActionListener() {
@@ -528,8 +668,14 @@ public class CEDecisionResults extends JDialog {
                 }
             });
             stateCheckbox.setSelected(true);
-            showHideCheckBoxes.add(stateCheckbox);
+            checkBoxesList.add(stateCheckbox);
             showHidePanel.add(stateCheckbox);
+        }
+
+        if (analysisTab == AnalysisTab.CEPLANE) {
+            cePlaneShowHideCheckBoxes = checkBoxesList;
+        } else if (analysisTab == AnalysisTab.FRONTIER_INTERVENTIONS) {
+            frontierInterventionsShowHideCheckBoxes = checkBoxesList;
         }
 
         JScrollPane scrollPane = new JScrollPane(showHidePanel);
@@ -589,12 +735,12 @@ public class CEDecisionResults extends JDialog {
     }
 
     /**
-     * Repaint and refresh the tablePanel and its components
+     * Repaint and refresh the analysisTablePanel and its components
      */
     private void refreshTablePanel(){
         this.setVisible(false);
-        analysisPanel.remove(tablePanel);
-        analysisPanel.add(getTablePanel(), BorderLayout.CENTER);
+        analysisPanel.remove(analysisTablePanel);
+        analysisPanel.add(getAnalysisTablePanel(), BorderLayout.CENTER);
         this.setVisible(true);
     }
 
@@ -624,7 +770,7 @@ public class CEDecisionResults extends JDialog {
         for(int cepIndex = 0 ; cepIndex < cepsForDecision.length; cepIndex++){
 
             // If the serie is hidden, skip it from JFreeChart
-            if(!showHideCheckBoxes.get(cepIndex).isSelected()){
+            if(!cePlaneShowHideCheckBoxes.get(cepIndex).isSelected()){
                 continue;
             }
             XYSeries series = new XYSeries(decisionVariable.getStateName(cepIndex));
