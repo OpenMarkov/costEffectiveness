@@ -11,6 +11,7 @@
 		<Cost value="Coste" />
 		<Effectiveness value="Efectividad" />
 		<Intervention value="Intervención" />
+		<ICER value="RCEI" />
 		<Scope value="Selección de escenario" />
 		<Intervals>
 			<Label value="Intervalos" />

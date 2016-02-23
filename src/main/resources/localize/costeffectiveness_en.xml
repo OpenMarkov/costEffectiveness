@@ -11,6 +11,7 @@
 		<Cost value="Cost" />
 		<Effectiveness value="Effectiveness" />
 		<Intervention value="Intervention" />
+		<ICER value="ICER" />
 		<Scope value="Scope selector" />
 		<Intervals>
 			<Label value="Intervals" />
