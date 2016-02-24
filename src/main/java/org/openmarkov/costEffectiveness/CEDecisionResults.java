@@ -125,9 +125,7 @@ public class CEDecisionResults extends JDialog {
     private final int COLUMN_ICER = 3;
     private final String CLICKABLE_COLUMN_COLOR ="#DDF5D8";
     private boolean hasInterventions;
-
-    private final NumberFormat thresholdFormateer = new DecimalFormat("#0.000E0");
-    private final NumberFormat icerFormateer = new DecimalFormat("#0.000");
+    private final int DEFAULT_NUM_SIGNIFICANT_NUMBERS = 5;
 
     private enum AnalysisTab {
         ANALYSIS,
@@ -291,9 +289,9 @@ public class CEDecisionResults extends JDialog {
             double lowerBound = 0;
 
             for (double threshold : thresholdList) {
-                JRadioButton intervalRadioButton = new JRadioButton(thresholdFormateer.format(lowerBound) + " - " +
-                        thresholdFormateer.format(threshold));
-//                JRadioButton intervalRadioButton = new JRadioButton(lowerBound + " - " + threshold);
+                JRadioButton intervalRadioButton = new JRadioButton(
+                        Util.roundWithSignificantFigures(lowerBound, DEFAULT_NUM_SIGNIFICANT_NUMBERS) + " - " +
+                                Util.roundWithSignificantFigures(threshold, DEFAULT_NUM_SIGNIFICANT_NUMBERS));
                 buttonGroup.add(intervalRadioButton);
                 thresholdsRadioButtons.add(intervalRadioButton);
                 intervalsPanel.add(intervalRadioButton);
@@ -305,8 +303,9 @@ public class CEDecisionResults extends JDialog {
                 });
                 lowerBound = threshold;
             }
-            JRadioButton intervalRadioButton = new JRadioButton(thresholdFormateer.format(lowerBound) + " - " + Double.POSITIVE_INFINITY);
-//            JRadioButton intervalRadioButton = new JRadioButton(lowerBound + " - " + Double.POSITIVE_INFINITY);
+            JRadioButton intervalRadioButton = new JRadioButton(
+                    Util.roundWithSignificantFigures(lowerBound, DEFAULT_NUM_SIGNIFICANT_NUMBERS) + " - " +
+                            Double.POSITIVE_INFINITY);
 
             buttonGroup.add(intervalRadioButton);
             intervalRadioButton.addActionListener(new ActionListener() {
@@ -375,8 +374,10 @@ public class CEDecisionResults extends JDialog {
             values[row][COLUMN_STATE_NAME] = decisionVariable.getStateName(row);
 
             // Set costs and effectiveness for that decision state
-            values[row][COLUMN_COST] = cepsForDecision[row].getCost(meanThreshold);
-            values[row][COLUMN_EFFECTIVENESS] = cepsForDecision[row].getEffectiveness(meanThreshold);
+            values[row][COLUMN_COST] = Util.roundWithSignificantFigures(
+                    cepsForDecision[row].getCost(meanThreshold), DEFAULT_NUM_SIGNIFICANT_NUMBERS);
+            values[row][COLUMN_EFFECTIVENESS] = Util.roundWithSignificantFigures(
+                    cepsForDecision[row].getEffectiveness(meanThreshold), DEFAULT_NUM_SIGNIFICANT_NUMBERS);
             if (hasInterventions) {
                 values[row][COLUMN_INTERVENTION] = cepsForDecision[row].getIntervention(meanThreshold);
             }
@@ -483,8 +484,12 @@ public class CEDecisionResults extends JDialog {
             values[row][COLUMN_STATE_NAME] = interventionsNames[row];
 
             // Set costs and effectiveness for that decision state
-            values[row][COLUMN_COST] = frontierInterventions.get(row).getCost(meanThreshold);
-            values[row][COLUMN_EFFECTIVENESS] = frontierInterventions.get(row).getEffectiveness(meanThreshold);
+            values[row][COLUMN_COST] = Util.roundWithSignificantFigures(
+                    frontierInterventions.get(row).getCost(meanThreshold),
+                    DEFAULT_NUM_SIGNIFICANT_NUMBERS);
+            values[row][COLUMN_EFFECTIVENESS] = Util.roundWithSignificantFigures(
+                    frontierInterventions.get(row).getEffectiveness(meanThreshold),
+                    DEFAULT_NUM_SIGNIFICANT_NUMBERS);
 
             // Set the ICER between the first (cheaper) intervention and the current intervention
             double icer = 0;
@@ -496,34 +501,10 @@ public class CEDecisionResults extends JDialog {
                         subtract(BigDecimal.valueOf(cheapestIntervention.getEffectiveness(meanThreshold)))).doubleValue();
                 icer = costDif / effDif;
             }
-            values[row][COLUMN_ICER] = icerFormateer.format(icer);
+            values[row][COLUMN_ICER] = new Double(Util.roundWithSignificantFigures(icer, DEFAULT_NUM_SIGNIFICANT_NUMBERS));
         }
 
-        final JTable jtable = new JTable(values, getColumns(AnalysisTab.FRONTIER_INTERVENTIONS)) {
-            @Override
-            public void doLayout()
-            {
-                if (tableHeader != null)
-                {
-                    TableColumn resizingColumn = tableHeader.getResizingColumn();
-                    //  Viewport size changed. Increase last columns width
-
-                    if (resizingColumn == null)
-                    {
-                        TableColumnModel tcm = getColumnModel();
-                        int lastColumn = tcm.getColumnCount() - 1;
-                        tableHeader.setResizingColumn( tcm.getColumn( lastColumn ) ) ;
-                    }
-                }
-
-                super.doLayout();
-            }
-
-            public boolean getScrollableTracksViewportWidth()
-            {
-                return getPreferredSize().width < getParent().getWidth();
-            }
-        };
+        JTable jtable = new JTable(values, getColumns(AnalysisTab.FRONTIER_INTERVENTIONS));
 
         // Create a new default editor with non-editable cells
         DefaultCellEditor notEditableCellEditor = new DefaultCellEditor(new JTextField()){
@@ -772,7 +753,8 @@ public class CEDecisionResults extends JDialog {
         }
 
         JScrollPane scrollPane = new JScrollPane(showHidePanel);
-        scrollPane.setBorder(new EmptyBorder(2,2,2,2));
+        scrollPane.setBorder(new EmptyBorder(5,5,5,5));
+        scrollPane.setPreferredSize(new Dimension(150,0));
         return scrollPane;
     }
 
@@ -962,8 +944,28 @@ public class CEDecisionResults extends JDialog {
         XYSeriesCollection dataset = new XYSeriesCollection();
         XYSeries frontierInterventionsSerie = new XYSeries(stringDatabase.getString("CostEffectivenessResults.FrontierInterventions.Tab"));
 
+        double baseCost;
+        double baseEffectiveness;
+
+        if(relativeRadioButton.isSelected()){
+            int indexSelected = relativeDecisionSelector.getSelectedIndex();
+            baseCost = cepsForDecision[indexSelected].getCost(meanThreshold);;
+            baseEffectiveness = cepsForDecision[indexSelected].getEffectiveness(meanThreshold);;
+
+        // Absolute
+        } else {
+            baseCost = 0;
+            baseEffectiveness = 0;
+        }
+
         for (CEP cep : calculateFrontierInterventions(AnalysisTab.CEPLANE)) {
-            frontierInterventionsSerie.add(cep.getEffectiveness(meanThreshold), cep.getCost(meanThreshold));
+            double cost = cep.getCost(meanThreshold);
+            cost -= baseCost;
+
+            double effectiveness = cep.getEffectiveness(meanThreshold);
+            effectiveness -= baseEffectiveness;
+
+            frontierInterventionsSerie.add(effectiveness,cost);
         }
 
         dataset.addSeries(frontierInterventionsSerie);
