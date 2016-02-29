@@ -1,6 +1,7 @@
 package org.openmarkov.costEffectiveness;
 
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.InvalidStateException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.UnexpectedInferenceException;
 import org.openmarkov.core.gui.dialog.inference.common.InferenceOptionsDialog;
@@ -12,6 +13,7 @@ import org.openmarkov.core.gui.window.MainPanel;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.EvidenceCase;
+import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.inference.tasks.VariableElimination.VECEAGlobal;
 
@@ -55,8 +57,20 @@ public class CostEffectivenessFrame extends JFrame {
                     CEPDialog cepDialog = new CEPDialog(owner,cep, probNet);
                     cepDialog.setVisible(true);
                 } else {
+                    EvidenceCase newPreResolutionEvidence = new EvidenceCase(preResolutionEvidence);
+                    for (Finding finding : scopeSelectorPanel.getSelectedFindings()) {
+                        try {
+                            newPreResolutionEvidence.addFinding(finding);
+                        } catch (InvalidStateException | IncompatibleEvidenceException e) {
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    e.getMessage(),
+                                    StringDatabase.getUniqueInstance().getString("LoadEvidence.Error.IncompatibleEvidence"),
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
                     CEDecisionResults ceDecisionResults = new CEDecisionResults(owner, probNet,
-                            preResolutionEvidence,scopeSelectorPanel.getDecisionSelected());
+                            newPreResolutionEvidence,scopeSelectorPanel.getDecisionSelected());
 
                 }
             } catch (NotEvaluableNetworkException e) {

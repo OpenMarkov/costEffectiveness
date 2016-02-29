@@ -30,8 +30,8 @@
 		</FrontierInterventions>
 		<AcceptabilityCurve>
 			<Tab value="CACE" />
-			<Label value="Curva de aceptabilidad de coste-efectividad" />
-			<Vertical value="Probabilidad de coste-efectividad" />
+			<Label value="Curva de aceptabilidad" />
+			<Vertical value="Probabilidad de ser coste-efectiva" />
 			<Horizontal value="Disposición a pagar" />
 		</AcceptabilityCurve>
 		<EVPI>
