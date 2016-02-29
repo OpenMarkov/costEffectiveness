@@ -133,28 +133,27 @@ public class CEDecisionResults extends JDialog {
         FRONTIER_INTERVENTIONS
     }
 
-    public CEDecisionResults(Window owner, ProbNet probNet, EvidenceCase evidenceCase, Variable decisionVariable){
+    public CEDecisionResults(Window owner, ProbNet probNet, EvidenceCase evidenceCase, Variable decisionVariable)
+            throws NotEvaluableNetworkException, IncompatibleEvidenceException, UnexpectedInferenceException {
         super(owner);
         this.probNet = probNet;
         this.decisionVariable = decisionVariable;
 
         // Run the task
-        try {
-            veceaDecision = new VECEADecision(probNet, evidenceCase, decisionVariable);
-            gtablePotentialResult = veceaDecision.getCEPPotential();
 
-            hasInterventions = false;
-            for (Object cep : veceaDecision.getCEPPotential().elementTable) {
-                Intervention [] interventions = ((CEP) cep).getInterventions();
-                if (interventions != null && interventions.length != 0 && interventions[0] != null) {
-                    hasInterventions = true;
-                    break;
-                }
+        veceaDecision = new VECEADecision(probNet, evidenceCase, decisionVariable);
+        gtablePotentialResult = veceaDecision.getCEPPotential();
+
+        hasInterventions = false;
+        for (Object cep : veceaDecision.getCEPPotential().elementTable) {
+            Intervention [] interventions = ((CEP) cep).getInterventions();
+            if (interventions != null && interventions.length != 0 && interventions[0] != null) {
+                hasInterventions = true;
+                break;
             }
-
-        } catch (NotEvaluableNetworkException | IncompatibleEvidenceException | UnexpectedInferenceException e) {
-            e.printStackTrace();
         }
+
+
         initialize();
 
         Toolkit toolkit = Toolkit.getDefaultToolkit ();

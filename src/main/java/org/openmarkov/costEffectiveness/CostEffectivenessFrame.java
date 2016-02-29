@@ -77,7 +77,9 @@ public class CostEffectivenessFrame extends JFrame {
                 JOptionPane.showMessageDialog(
                         null,
                         StringDatabase.getUniqueInstance().getString("CostEffectivenessDeterministic.Error")
-                                + e.getMessage());
+                                + ". " + e.getMessage(),
+                        "Error"
+                        , JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
             } catch (IncompatibleEvidenceException | UnexpectedInferenceException e) {
                 e.printStackTrace();
