@@ -857,23 +857,11 @@ public class CEDecisionResults extends JDialog {
         renderer2.setSeriesPaint(0, Color.RED);
         BasicStroke stroke = new BasicStroke();
         renderer2.setSeriesStroke( 0,new BasicStroke(2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,1.0f, new float[] {6.0f, 6.0f}, 0.0f));
+
         // Set the line data, renderer, and axis into plot
         plot.setDataset(1, collection2);
         plot.setRenderer(1, renderer2);
         JFreeChart chart = new JFreeChart(stringDatabase.getString("CostEffectivenessResults.Plane.Label"), plot);
-
-//
-//        // Set the JFreeChart parameters call
-//        JFreeChart chart = ChartFactory.createScatterPlot(
-//                stringDatabase.getString("CostEffectivenessResults.Plane.Label"),   // Chart title
-//                stringDatabase.getString("CostEffectivenessResults.Effectiveness"), // X axis label
-//                stringDatabase.getString("CostEffectivenessResults.Cost"),          // Y axis label
-//                scatterPlotDataset,                                            // data
-//                PlotOrientation.VERTICAL,                            // Orientation
-//                true,                                                // Legend
-//                true,                                                // ToolTips
-//                false                                                // Urls
-//        );
 
         // Set general aspects
         chart.getLegend().setPosition(RectangleEdge.RIGHT);
