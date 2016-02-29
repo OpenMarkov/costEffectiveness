@@ -30,8 +30,8 @@
 		</FrontierInterventions>
 		<AcceptabilityCurve>
 			<Tab value="CEAC" />
-			<Label value="Cost-Effectiveness Acceptability Curve" />
-			<Vertical value="Probability of cost effectiveness" />
+			<Label value="Acceptability Curve" />
+			<Vertical value="Probability of being cost-effective" />
 			<Horizontal value="Willingness to pay" />
 		</AcceptabilityCurve>
 		<EVPI>
