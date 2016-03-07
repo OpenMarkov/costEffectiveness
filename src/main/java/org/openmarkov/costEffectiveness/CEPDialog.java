@@ -31,9 +31,6 @@ public class CEPDialog extends JDialog {
 
 	private final String CLICKABLE_COLUMN_COLOR ="#DDF5D8";
 
-	// Attributes
-	private int numDecimals = DEFAULT_NUM_DECIMALS;
-
     private CEP cep;
 
     private ProbNet probNet;
@@ -233,8 +230,8 @@ public class CEPDialog extends JDialog {
         for (int i = 0; i < numRows; i++) {
             data[i][CEPColumns.LAMBDA_INF.getIndex()] = getLambdaLeftEndPoint(cep, i);
             data[i][CEPColumns.LAMBDA_SUP.getIndex()] = getLambdaRightEndPoint(cep, i, numRows);
-            data[i][CEPColumns.COST.getIndex()] = new Double(Util.roundWithSignificantFigures(costs[i], numDecimals)).toString();
-            data[i][CEPColumns.EFFECTIVENESS.getIndex()] = new Double(Util.roundWithSignificantFigures(effectiveness[i], numDecimals)).toString();
+            data[i][CEPColumns.COST.getIndex()] = costs[i];
+            data[i][CEPColumns.EFFECTIVENESS.getIndex()] = effectiveness[i];
             data[i][CEPColumns.INTERVENTION.getIndex()] = getFirstLine(interventions[i].toString());
         }
 
@@ -255,7 +252,7 @@ public class CEPDialog extends JDialog {
     }
 
 	private void setColumnCellRenderer(JTable table, int columnIndex, Color color, String text) {
-        DefaultTableCellRenderer renderer =	new DefaultTableCellRenderer();
+        DefaultTableCellRenderer renderer =	getDoubleCellRenderer();
         if(text != null){
             renderer.setToolTipText(text);
         }
@@ -291,7 +288,7 @@ public class CEPDialog extends JDialog {
         } else {
             threshold = cep.getThreshold(intervalIndex - 1);
         }
-        return new Double(Util.roundWithSignificantFigures(threshold, numDecimals)).toString();
+        return new Double(Util.roundWithSignificantFigures(threshold, DEFAULT_NUM_DECIMALS)).toString();
     }
 
     /**
@@ -310,7 +307,7 @@ public class CEPDialog extends JDialog {
         if (threshold == Double.POSITIVE_INFINITY) {
         	lambdaRight = "+\u221E"; // +Inifinite
         } else {
-        	lambdaRight = new Double(Util.roundWithSignificantFigures(threshold, numDecimals)).toString();
+        	lambdaRight = new Double(Util.roundWithSignificantFigures(threshold, DEFAULT_NUM_DECIMALS)).toString();
         }
         return lambdaRight;
     }
@@ -324,5 +321,18 @@ public class CEPDialog extends JDialog {
             return false;
         }
     }
-    
+
+    private DefaultTableCellRenderer getDoubleCellRenderer(){
+        DefaultTableCellRenderer doubleCellRenderer  =	new DefaultTableCellRenderer() {
+            public Component getTableCellRendererComponent(JTable table,
+                                                           Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+
+                if (value instanceof Double) {
+                    value = Util.roundWithSignificantFigures((Double) value, DEFAULT_NUM_DECIMALS);
+                }
+                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,column);
+            }
+        };
+        return doubleCellRenderer;
+    }
 }

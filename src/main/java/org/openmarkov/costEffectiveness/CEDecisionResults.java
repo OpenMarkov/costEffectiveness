@@ -373,10 +373,8 @@ public class CEDecisionResults extends JDialog {
             values[row][COLUMN_STATE_NAME] = decisionVariable.getStateName(row);
 
             // Set costs and effectiveness for that decision state
-            values[row][COLUMN_COST] = Util.roundWithSignificantFigures(
-                    cepsForDecision[row].getCost(meanThreshold), DEFAULT_NUM_SIGNIFICANT_NUMBERS);
-            values[row][COLUMN_EFFECTIVENESS] = Util.roundWithSignificantFigures(
-                    cepsForDecision[row].getEffectiveness(meanThreshold), DEFAULT_NUM_SIGNIFICANT_NUMBERS);
+            values[row][COLUMN_COST] = cepsForDecision[row].getCost(meanThreshold);
+            values[row][COLUMN_EFFECTIVENESS] = cepsForDecision[row].getEffectiveness(meanThreshold);
             if (hasInterventions) {
                 values[row][COLUMN_INTERVENTION] = cepsForDecision[row].getIntervention(meanThreshold);
             }
@@ -442,6 +440,7 @@ public class CEDecisionResults extends JDialog {
 
         for (int columnIndex = 0 ; columnIndex < jtable.getColumnModel().getColumnCount(); columnIndex++){
             jtable.getColumnModel().getColumn(columnIndex).setCellEditor(notEditableCellEditor);
+            jtable.getColumnModel().getColumn(columnIndex).setCellRenderer(getDoubleCellRenderer());
         }
 
         DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
@@ -457,6 +456,20 @@ public class CEDecisionResults extends JDialog {
 
 
         return jtable;
+    }
+
+    private DefaultTableCellRenderer getDoubleCellRenderer(){
+        DefaultTableCellRenderer doubleCellRenderer  =	new DefaultTableCellRenderer() {
+            public Component getTableCellRendererComponent(JTable table,
+                                                           Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+
+                if (value instanceof Double) {
+                    value = Util.roundWithSignificantFigures((Double) value, DEFAULT_NUM_SIGNIFICANT_NUMBERS);
+                }
+                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,column);
+            }
+        };
+        return doubleCellRenderer;
     }
 
     /**
@@ -483,12 +496,8 @@ public class CEDecisionResults extends JDialog {
             values[row][COLUMN_STATE_NAME] = interventionsNames[row];
 
             // Set costs and effectiveness for that decision state
-            values[row][COLUMN_COST] = Util.roundWithSignificantFigures(
-                    frontierInterventions.get(row).getCost(meanThreshold),
-                    DEFAULT_NUM_SIGNIFICANT_NUMBERS);
-            values[row][COLUMN_EFFECTIVENESS] = Util.roundWithSignificantFigures(
-                    frontierInterventions.get(row).getEffectiveness(meanThreshold),
-                    DEFAULT_NUM_SIGNIFICANT_NUMBERS);
+            values[row][COLUMN_COST] = frontierInterventions.get(row).getCost(meanThreshold);
+            values[row][COLUMN_EFFECTIVENESS] = frontierInterventions.get(row).getEffectiveness(meanThreshold);
 
             // Set the ICER between the first (cheaper) intervention and the current intervention
             double icer = 0;
@@ -500,7 +509,7 @@ public class CEDecisionResults extends JDialog {
                         subtract(BigDecimal.valueOf(cheapestIntervention.getEffectiveness(meanThreshold)))).doubleValue();
                 icer = costDif / effDif;
             }
-            values[row][COLUMN_ICER] = new Double(Util.roundWithSignificantFigures(icer, DEFAULT_NUM_SIGNIFICANT_NUMBERS));
+            values[row][COLUMN_ICER] = new Double(icer);
         }
 
         JTable jtable = new JTable(values, getColumns(AnalysisTab.FRONTIER_INTERVENTIONS));
@@ -516,20 +525,14 @@ public class CEDecisionResults extends JDialog {
         // Sets the editor into all columns
         for (int columnIndex = 0 ; columnIndex < jtable.getColumnModel().getColumnCount(); columnIndex++){
             jtable.getColumnModel().getColumn(columnIndex).setCellEditor(notEditableCellEditor);
+            jtable.getColumnModel().getColumn(columnIndex).setCellRenderer(getDoubleCellRenderer());
+
         }
 
 
         DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
         headerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
         jtable.getTableHeader().setDefaultRenderer(headerRenderer);
-        // Set colors in jTable
-//        DefaultTableCellRenderer renderer =	new DefaultTableCellRenderer();
-//        renderer.setBackground(Color.decode(CLICKABLE_COLUMN_COLOR));
-//
-//        if (hasInterventions) {
-//            jtable.getColumnModel().getColumn(COLUMN_INTERVENTION).setCellRenderer(renderer);
-//        }
-
 
         return jtable;
     }
