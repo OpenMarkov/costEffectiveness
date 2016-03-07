@@ -10,6 +10,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.openmarkov.core.gui.dialog.common.OkCancelHorizontalDialog;
 import org.openmarkov.core.gui.dialog.inference.common.ScopeSelectorPanel;
 import org.openmarkov.core.gui.plugin.ToolPlugin;
+import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
 
 import javax.swing.*;
@@ -27,16 +28,17 @@ public class CostEffectivenessDialog extends OkCancelHorizontalDialog {
     private static final long       serialVersionUID       = 1L;
     private ProbNet                 probNet;
     private ScopeSelectorPanel      scopeSelectorPanel;
-
+    private EvidenceCase            preResolutionEvidence;
     /**
      * Creates a CostEffectivenessDialog for temporal evolution
      * 
      * @param owner
      *            The parent of the dialog
      */
-    public CostEffectivenessDialog(Window owner, ProbNet probNet) {
+    public CostEffectivenessDialog(Window owner, ProbNet probNet, EvidenceCase preResolutionEvidence) {
         super(owner);
         this.probNet = probNet;
+        this.preResolutionEvidence = preResolutionEvidence;
         initialize();
         setResizable(true);
         setTitle(probNet.getName());
@@ -56,7 +58,7 @@ public class CostEffectivenessDialog extends OkCancelHorizontalDialog {
         JPanel otherPanel = new JPanel();
         otherPanel.setLayout(new BorderLayout());
         if(scopeSelectorPanel == null){
-            scopeSelectorPanel = new ScopeSelectorPanel(probNet);
+            scopeSelectorPanel = new ScopeSelectorPanel(probNet, preResolutionEvidence);
         }
         otherPanel.add(scopeSelectorPanel);
 

@@ -45,7 +45,7 @@ public class CostEffectivenessFrame extends JFrame {
             return;
         }
 
-        CostEffectivenessDialog costEffectivenessDialog = new CostEffectivenessDialog(owner, probNet);
+        CostEffectivenessDialog costEffectivenessDialog = new CostEffectivenessDialog(owner, probNet, preResolutionEvidence);
 
         if ((costEffectivenessDialog.requestData() == CostEffectivenessDialog.OK_BUTTON)) {
             ScopeSelectorPanel scopeSelectorPanel = costEffectivenessDialog.getScopeSelectorPanel();
