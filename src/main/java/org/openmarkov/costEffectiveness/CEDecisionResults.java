@@ -655,7 +655,7 @@ public class CEDecisionResults extends JDialog {
         JPanel absRelShowHidePanel = new JPanel();
         absRelShowHidePanel.setLayout(new BorderLayout());
         absRelShowHidePanel.add(getAbsoluteRelativePanel(), BorderLayout.NORTH);
-        absRelShowHidePanel.add(getShowHidePanel(analysisTab),BorderLayout.SOUTH);
+        absRelShowHidePanel.add(getShowHidePanel(analysisTab));
 
         return absRelShowHidePanel;
     }
