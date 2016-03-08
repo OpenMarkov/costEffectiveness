@@ -232,7 +232,8 @@ public class CEPDialog extends JDialog {
             data[i][CEPColumns.LAMBDA_SUP.getIndex()] = getLambdaRightEndPoint(cep, i, numRows);
             data[i][CEPColumns.COST.getIndex()] = costs[i];
             data[i][CEPColumns.EFFECTIVENESS.getIndex()] = effectiveness[i];
-            data[i][CEPColumns.INTERVENTION.getIndex()] = getFirstLine(interventions[i].toString());
+            data[i][CEPColumns.INTERVENTION.getIndex()] = 
+            		interventions[i] == null ? "null" : getFirstLine(interventions[i].toString());
         }
 
         return data;
