@@ -6,7 +6,7 @@
   <version>0.2.0-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <additionalparam>-Xdoclint:none</additionalparam>
+        <!--<additionalparam>-Xdoclint:none</additionalparam>-->
     </properties>
     <packaging>jar</packaging>
     <name>org.openmarkov.costEffectiveness</name>
