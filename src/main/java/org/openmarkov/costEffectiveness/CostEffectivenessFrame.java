@@ -15,9 +15,16 @@ import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.ProbNet;
+import org.openmarkov.core.model.network.Variable;
+import org.openmarkov.core.model.network.potential.GTablePotential;
+import org.openmarkov.core.model.network.type.DecisionAnalysisNetworkType;
+import org.openmarkov.core.model.network.type.InfluenceDiagramType;
+import org.openmarkov.core.model.network.type.MIDType;
+import org.openmarkov.inference.decompositionIntoSymmetricDANs.DecompositionAlgorithmArticleCEA;
 import org.openmarkov.inference.tasks.VariableElimination.VECEAGlobal;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 /**
  * @author jperez-martin
@@ -52,10 +59,19 @@ public class CostEffectivenessFrame extends JFrame {
             try {
                 if(scopeSelectorPanel.getScopeType().equals(ScopeType.GLOBAL)) {
 
-                    VECEAGlobal veGlobalCEA = new VECEAGlobal(probNet, preResolutionEvidence);
-                    CEP cep = veGlobalCEA.getCEP();
-                    CEPDialog cepDialog = new CEPDialog(owner,cep, probNet);
-                    cepDialog.setVisible(true);
+                    if (probNet.getNetworkType() instanceof InfluenceDiagramType ||
+                            probNet.getNetworkType() instanceof MIDType) {
+                        VECEAGlobal veGlobalCEA = new VECEAGlobal(probNet, preResolutionEvidence);
+                        CEP cep = veGlobalCEA.getCEP();
+                        CEPDialog cepDialog = new CEPDialog(owner, cep, probNet);
+                        cepDialog.setVisible(true);
+                    } else if (probNet.getNetworkType() instanceof DecisionAnalysisNetworkType) {
+                        DecompositionAlgorithmArticleCEA decompositionAlgorithmArticleCEA = new DecompositionAlgorithmArticleCEA();
+                        DecompositionAlgorithmArticleCEA.DANEvaluationOutputCEA outputCEA = decompositionAlgorithmArticleCEA.evaluateDSD_CEA(probNet, new ArrayList<Variable>(), preResolutionEvidence);
+                        CEP cep = (CEP) ((GTablePotential) outputCEA.getUtility().get(0)).elementTable.get(0);
+                        CEPDialog cepDialog = new CEPDialog(owner, cep, probNet);
+                        cepDialog.setVisible(true);
+                    }
                 } else {
                     EvidenceCase newPreResolutionEvidence = new EvidenceCase(preResolutionEvidence);
                     for (Finding finding : scopeSelectorPanel.getSelectedFindings()) {
