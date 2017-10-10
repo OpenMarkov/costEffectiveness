@@ -68,7 +68,7 @@ public class CostEffectivenessFrame extends JFrame {
                     } else if (probNet.getNetworkType() instanceof DecisionAnalysisNetworkType) {
                         DecompositionAlgorithmArticleCEA decompositionAlgorithmArticleCEA = new DecompositionAlgorithmArticleCEA();
                         DecompositionAlgorithmArticleCEA.DANEvaluationOutputCEA outputCEA = decompositionAlgorithmArticleCEA.evaluateDSD_CEA(probNet, new ArrayList<Variable>(), preResolutionEvidence);
-                        CEP cep = (CEP) ((GTablePotential) outputCEA.getUtility().get(0)).elementTable.get(0);
+                        CEP cep = (CEP) ((GTablePotential) outputCEA.getUtility()).elementTable.get(0);
                         CEPDialog cepDialog = new CEPDialog(owner, cep, probNet);
                         cepDialog.setVisible(true);
                     }
