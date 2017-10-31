@@ -15,21 +15,20 @@ import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
 import org.openmarkov.core.model.network.ProbNet;
-import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.GTablePotential;
 import org.openmarkov.core.model.network.type.DecisionAnalysisNetworkType;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.core.model.network.type.MIDType;
-import org.openmarkov.inference.decompositionIntoSymmetricDANs.DecompositionAlgorithmArticleCEA;
+import org.openmarkov.inference.decompositionIntoSymmetricDANs.DANDecompositionAlgorithm;
+import org.openmarkov.inference.decompositionIntoSymmetricDANs.DANEvaluationOutput;
 import org.openmarkov.inference.tasks.VariableElimination.VECEAGlobal;
 
 import javax.swing.*;
-import java.util.ArrayList;
 
 /**
  * @author jperez-martin
  */
-@ToolPlugin( name="CostEffectivenessDeterministic", command="Tools.CostEffectivenessDeterministic")
+@ToolPlugin(name = "CostEffectivenessDeterministic", command = "Tools.CostEffectivenessDeterministic")
 public class CostEffectivenessFrame extends JFrame {
 
     /**
@@ -39,7 +38,7 @@ public class CostEffectivenessFrame extends JFrame {
      */
     public CostEffectivenessFrame(JFrame owner) {
         super();
-        ProbNet probNet = MainPanel.getUniqueInstance ().getMainPanelListenerAssistant ().getCurrentNetworkPanel ().getProbNet ();
+        ProbNet probNet = MainPanel.getUniqueInstance().getMainPanelListenerAssistant().getCurrentNetworkPanel().getProbNet();
         EvidenceCase preResolutionEvidence = MainPanel.getUniqueInstance().
                 getMainPanelMenuAssistant().getCurrentNetworkPanel().getEditorPanel().getPreResolutionEvidence();
 
@@ -48,7 +47,7 @@ public class CostEffectivenessFrame extends JFrame {
                 owner,
                 MulticriteriaOptions.Type.COST_EFFECTIVENESS);
 
-        if(inferenceOptionsDialog.getSelectedButton() != InferenceOptionsDialog.OK_BUTTON){
+        if (inferenceOptionsDialog.getSelectedButton() != InferenceOptionsDialog.OK_BUTTON) {
             return;
         }
 
@@ -57,7 +56,7 @@ public class CostEffectivenessFrame extends JFrame {
         if ((costEffectivenessDialog.requestData() == CostEffectivenessDialog.OK_BUTTON)) {
             ScopeSelectorPanel scopeSelectorPanel = costEffectivenessDialog.getScopeSelectorPanel();
             try {
-                if(scopeSelectorPanel.getScopeType().equals(ScopeType.GLOBAL)) {
+                if (scopeSelectorPanel.getScopeType().equals(ScopeType.GLOBAL)) {
 
                     if (probNet.getNetworkType() instanceof InfluenceDiagramType ||
                             probNet.getNetworkType() instanceof MIDType) {
@@ -66,8 +65,8 @@ public class CostEffectivenessFrame extends JFrame {
                         CEPDialog cepDialog = new CEPDialog(owner, cep, probNet);
                         cepDialog.setVisible(true);
                     } else if (probNet.getNetworkType() instanceof DecisionAnalysisNetworkType) {
-                        DecompositionAlgorithmArticleCEA decompositionAlgorithmArticleCEA = new DecompositionAlgorithmArticleCEA();
-                        DecompositionAlgorithmArticleCEA.DANEvaluationOutputCEA outputCEA = decompositionAlgorithmArticleCEA.evaluateDSD_CEA(probNet, new ArrayList<Variable>(), preResolutionEvidence);
+                        DANDecompositionAlgorithm decompositionAlgorithmArticleCEA = new DANDecompositionAlgorithm();
+                        DANEvaluationOutput outputCEA = decompositionAlgorithmArticleCEA.evaluate(probNet, preResolutionEvidence);
                         CEP cep = (CEP) ((GTablePotential) outputCEA.getUtility()).elementTable.get(0);
                         CEPDialog cepDialog = new CEPDialog(owner, cep, probNet);
                         cepDialog.setVisible(true);
@@ -85,8 +84,7 @@ public class CostEffectivenessFrame extends JFrame {
                                     JOptionPane.ERROR_MESSAGE);
                         }
                     }
-                    CEDecisionResults ceDecisionResults = new CEDecisionResults(owner, probNet,
-                            newPreResolutionEvidence,scopeSelectorPanel.getDecisionSelected());
+                    new CEDecisionResults(owner, probNet, newPreResolutionEvidence, scopeSelectorPanel.getDecisionSelected());
 
                 }
             } catch (NotEvaluableNetworkException e) {
