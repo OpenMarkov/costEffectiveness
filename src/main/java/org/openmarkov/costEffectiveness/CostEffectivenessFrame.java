@@ -19,8 +19,7 @@ import org.openmarkov.core.model.network.potential.GTablePotential;
 import org.openmarkov.core.model.network.type.DecisionAnalysisNetworkType;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.core.model.network.type.MIDType;
-import org.openmarkov.inference.decompositionIntoSymmetricDANs.DANDecompositionAlgorithm;
-import org.openmarkov.inference.decompositionIntoSymmetricDANs.DANEvaluationOutput;
+import org.openmarkov.inference.decompositionIntoSymmetricDANs.DecompositionIntoSymmetricDANsEvaluation;
 import org.openmarkov.inference.tasks.VariableElimination.VECEAGlobal;
 
 import javax.swing.*;
@@ -65,9 +64,8 @@ public class CostEffectivenessFrame extends JFrame {
                         CEPDialog cepDialog = new CEPDialog(owner, cep, probNet);
                         cepDialog.setVisible(true);
                     } else if (probNet.getNetworkType() instanceof DecisionAnalysisNetworkType) {
-                        DANDecompositionAlgorithm decompositionAlgorithmArticleCEA = new DANDecompositionAlgorithm();
-                        DANEvaluationOutput outputCEA = decompositionAlgorithmArticleCEA.evaluate(probNet, preResolutionEvidence);
-                        CEP cep = (CEP) ((GTablePotential) outputCEA.getUtility()).elementTable.get(0);
+                        DecompositionIntoSymmetricDANsEvaluation decompositionAlgorithmArticleCEA = new DecompositionIntoSymmetricDANsEvaluation(probNet, preResolutionEvidence);
+                        CEP cep = (CEP) ((GTablePotential) decompositionAlgorithmArticleCEA.getUtility()).elementTable.get(0);
                         CEPDialog cepDialog = new CEPDialog(owner, cep, probNet);
                         cepDialog.setVisible(true);
                     }
