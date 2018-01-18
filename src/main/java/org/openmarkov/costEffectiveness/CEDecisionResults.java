@@ -16,12 +16,12 @@ import org.jfree.ui.RectangleEdge;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.UnexpectedInferenceException;
-import org.openmarkov.core.gui.loader.element.OpenMarkovLogoIcon;
-import org.openmarkov.core.gui.localize.StringDatabase;
+import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
+import org.openmarkov.gui.localize.StringDatabase;
 import org.openmarkov.core.model.network.*;
 import org.openmarkov.core.model.network.potential.GTablePotential;
 import org.openmarkov.core.model.network.potential.Intervention;
-import org.openmarkov.inference.tasks.VariableElimination.VECEADecision;
+import org.openmarkov.inference.variableElimination.tasks.VECEADecision;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

@@ -1,7 +1,7 @@
 package org.openmarkov.costEffectiveness;
 
-import org.openmarkov.core.gui.dialog.treeadd.TreeADDCellRenderer;
-import org.openmarkov.core.gui.dialog.treeadd.TreeADDEditorPanel;
+import org.openmarkov.gui.dialog.treeadd.TreeADDCellRenderer;
+import org.openmarkov.gui.dialog.treeadd.TreeADDEditorPanel;
 import org.openmarkov.core.model.network.Node;
 
 import java.awt.event.ActionListener;

@@ -7,9 +7,9 @@
 package org.openmarkov.costEffectiveness;
 
 import org.apache.commons.io.FilenameUtils;
-import org.openmarkov.core.gui.dialog.common.OkCancelHorizontalDialog;
-import org.openmarkov.core.gui.dialog.inference.common.ScopeSelectorPanel;
-import org.openmarkov.core.gui.plugin.ToolPlugin;
+import org.openmarkov.gui.dialog.common.OkCancelHorizontalDialog;
+import org.openmarkov.gui.dialog.inference.common.ScopeSelectorPanel;
+import org.openmarkov.gui.plugin.ToolPlugin;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
 

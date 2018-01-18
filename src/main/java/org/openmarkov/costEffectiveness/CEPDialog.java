@@ -2,7 +2,7 @@ package org.openmarkov.costEffectiveness;
 
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.UnexpectedInferenceException;
-import org.openmarkov.core.gui.localize.StringDatabase;
+import org.openmarkov.gui.localize.StringDatabase;
 import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Util;

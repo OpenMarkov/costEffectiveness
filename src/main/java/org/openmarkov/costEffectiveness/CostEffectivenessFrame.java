@@ -4,12 +4,12 @@ import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.InvalidStateException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.UnexpectedInferenceException;
-import org.openmarkov.core.gui.dialog.inference.common.InferenceOptionsDialog;
-import org.openmarkov.core.gui.dialog.inference.common.ScopeSelectorPanel;
-import org.openmarkov.core.gui.dialog.inference.common.ScopeType;
-import org.openmarkov.core.gui.localize.StringDatabase;
-import org.openmarkov.core.gui.plugin.ToolPlugin;
-import org.openmarkov.core.gui.window.MainPanel;
+import org.openmarkov.gui.dialog.inference.common.InferenceOptionsDialog;
+import org.openmarkov.gui.dialog.inference.common.ScopeSelectorPanel;
+import org.openmarkov.gui.dialog.inference.common.ScopeType;
+import org.openmarkov.gui.localize.StringDatabase;
+import org.openmarkov.gui.plugin.ToolPlugin;
+import org.openmarkov.gui.window.MainPanel;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.EvidenceCase;
@@ -20,7 +20,7 @@ import org.openmarkov.core.model.network.type.DecisionAnalysisNetworkType;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.core.model.network.type.MIDType;
 import org.openmarkov.inference.decompositionIntoSymmetricDANs.DecompositionIntoSymmetricDANsEvaluation;
-import org.openmarkov.inference.tasks.VariableElimination.VECEAGlobal;
+import org.openmarkov.inference.variableElimination.tasks.VECEAGlobal;
 
 import javax.swing.*;
 
