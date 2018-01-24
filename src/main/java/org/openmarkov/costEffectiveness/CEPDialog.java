@@ -6,7 +6,7 @@ import org.openmarkov.gui.localize.StringDatabase;
 import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Util;
-import org.openmarkov.core.model.network.potential.Intervention;
+import org.openmarkov.core.model.network.potential.StrategyTree;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -168,7 +168,7 @@ public class CEPDialog extends JDialog {
                   try {
                       interventionDialog = new InterventionDialog(getOwner(),
                               probNet,
-                              cep.getInterventions()[row]);
+                              cep.getStrategyTrees()[row]);
                   } catch (IncompatibleEvidenceException e) {
                       e.printStackTrace();
                   } catch (UnexpectedInferenceException e) {
@@ -225,7 +225,7 @@ public class CEPDialog extends JDialog {
         double[] costs = cep.getCosts();
         double[] effectiveness = cep.getEffectivities();
         int numRows = costs.length;
-        final Intervention[] interventions = cep.getInterventions();
+        final StrategyTree[] strategyTrees = cep.getStrategyTrees();
         Object[][] data = new Object[numRows][CEPColumns.values().length];
         for (int i = 0; i < numRows; i++) {
             data[i][CEPColumns.LAMBDA_INF.getIndex()] = getLambdaLeftEndPoint(cep, i);
@@ -233,7 +233,7 @@ public class CEPDialog extends JDialog {
             data[i][CEPColumns.COST.getIndex()] = costs[i];
             data[i][CEPColumns.EFFECTIVENESS.getIndex()] = effectiveness[i];
             data[i][CEPColumns.INTERVENTION.getIndex()] = 
-            		interventions[i] == null ? "null" : getFirstLine(interventions[i].toString());
+            		strategyTrees[i] == null ? "null" : getFirstLine(strategyTrees[i].toString());
         }
 
         return data;

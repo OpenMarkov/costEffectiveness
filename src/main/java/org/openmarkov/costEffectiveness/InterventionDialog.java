@@ -15,7 +15,7 @@ import org.openmarkov.core.model.network.Node;
 import org.openmarkov.core.model.network.NodeType;
 import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.Variable;
-import org.openmarkov.core.model.network.potential.Intervention;
+import org.openmarkov.core.model.network.potential.StrategyTree;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,12 +23,12 @@ import java.awt.*;
 @SuppressWarnings("serial")
 public class InterventionDialog extends OkCancelHorizontalDialog{
 
-	public InterventionDialog(Window owner, ProbNet probNet, Intervention intervention) throws IncompatibleEvidenceException, UnexpectedInferenceException {
+	public InterventionDialog(Window owner, ProbNet probNet, StrategyTree strategyTree) throws IncompatibleEvidenceException, UnexpectedInferenceException {
 		super(owner);
 		TreeADDCellRenderer cellRenderer = new TreeADDCellRenderer(probNet);
 		ProbNet dummyProbNet = new ProbNet();
 		Node dummyNode = new Node(dummyProbNet, new Variable("Global utility"), NodeType.UTILITY);
-		dummyNode.setPotential(intervention);
+		dummyNode.setPotential(strategyTree);
 
 		//VEPosteriorValues vePosteriorValues = new VEPosteriorValues(probNet,probNet.getVariables(),preResolutionEvidence,evidenceCase);
 		//individualProbabilities = vePosteriorValues.getPosteriorValues();

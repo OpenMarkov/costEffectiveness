@@ -20,8 +20,8 @@ import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
 import org.openmarkov.gui.localize.StringDatabase;
 import org.openmarkov.core.model.network.*;
 import org.openmarkov.core.model.network.potential.GTablePotential;
-import org.openmarkov.core.model.network.potential.Intervention;
-import org.openmarkov.inference.variableElimination.tasks.VECEADecision;
+import org.openmarkov.core.model.network.potential.StrategyTree;
+import org.openmarkov.inference.variableElimination.tasks.VEEvaluation;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -55,7 +55,7 @@ public class CEDecisionResults extends JDialog {
     /**
      * Cost-effectiveness task (conditioned on a DecisionVariable)
      */
-    private VECEADecision veceaDecision;
+    private VEEvaluation veEvaluation;
 
     /**
      * Conditioning decision variable
@@ -141,13 +141,15 @@ public class CEDecisionResults extends JDialog {
 
         // Run the task
 
-        veceaDecision = new VECEADecision(probNet, evidenceCase, decisionVariable);
-        gtablePotentialResult = veceaDecision.getCEPPotential();
+		veEvaluation = new VEEvaluation(probNet);
+		veEvaluation.setPreResolutionEvidence(evidenceCase);
+		veEvaluation.setDecisionVariable(decisionVariable);
+        gtablePotentialResult = (GTablePotential) veEvaluation.getUtility();
 
         hasInterventions = false;
-        for (Object cep : veceaDecision.getCEPPotential().elementTable) {
-            Intervention [] interventions = ((CEP) cep).getInterventions();
-            if (interventions != null && interventions.length != 0 && interventions[0] != null) {
+        for (Object cep : gtablePotentialResult.elementTable) {
+            StrategyTree[] strategyTrees = ((CEP) cep).getStrategyTrees();
+            if (strategyTrees != null && strategyTrees.length != 0 && strategyTrees[0] != null) {
                 hasInterventions = true;
                 break;
             }
@@ -411,15 +413,14 @@ public class CEDecisionResults extends JDialog {
                 int row = jtable.rowAtPoint(event.getPoint());
                 int column = jtable.columnAtPoint(event.getPoint());
                 if (column == COLUMN_INTERVENTION) {
-                    Intervention intervention = cepsForDecision[row].getIntervention(
+                    StrategyTree strategyTree = cepsForDecision[row].getIntervention(
                             meanThreshold);
 
-                    if (intervention != null) {
+                    if (strategyTree != null) {
                         InterventionDialog interventionDialog = null;
                         try {
                             interventionDialog = new InterventionDialog(getOwner(),
-                                    probNet,
-                                    intervention);
+                                    probNet, strategyTree);
                         } catch (IncompatibleEvidenceException e) {
                             e.printStackTrace();
                         } catch (UnexpectedInferenceException e) {
