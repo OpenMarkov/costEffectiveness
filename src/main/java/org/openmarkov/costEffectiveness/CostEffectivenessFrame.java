@@ -4,13 +4,8 @@ import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.InvalidStateException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.UnexpectedInferenceException;
-import org.openmarkov.gui.dialog.inference.common.InferenceOptionsDialog;
-import org.openmarkov.gui.dialog.inference.common.ScopeSelectorPanel;
-import org.openmarkov.gui.dialog.inference.common.ScopeType;
-import org.openmarkov.gui.localize.StringDatabase;
-import org.openmarkov.gui.plugin.ToolPlugin;
-import org.openmarkov.gui.window.MainPanel;
 import org.openmarkov.core.inference.MulticriteriaOptions;
+import org.openmarkov.core.inference.tasks.CEAnalysis;
 import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.Finding;
@@ -19,8 +14,14 @@ import org.openmarkov.core.model.network.potential.GTablePotential;
 import org.openmarkov.core.model.network.type.DecisionAnalysisNetworkType;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.core.model.network.type.MIDType;
+import org.openmarkov.gui.dialog.inference.common.InferenceOptionsDialog;
+import org.openmarkov.gui.dialog.inference.common.ScopeSelectorPanel;
+import org.openmarkov.gui.dialog.inference.common.ScopeType;
+import org.openmarkov.gui.localize.StringDatabase;
+import org.openmarkov.gui.plugin.ToolPlugin;
+import org.openmarkov.gui.window.MainPanel;
 import org.openmarkov.inference.decompositionIntoSymmetricDANs.DecompositionIntoSymmetricDANsEvaluation;
-import org.openmarkov.inference.variableElimination.tasks.VEEvaluation;
+import org.openmarkov.inference.variableElimination.tasks.VECEAnalysis;
 
 import javax.swing.*;
 
@@ -59,9 +60,9 @@ import javax.swing.*;
 
 					if (probNet.getNetworkType() instanceof InfluenceDiagramType || probNet
 							.getNetworkType() instanceof MIDType) {
-						VEEvaluation veGlobalCEA = new VEEvaluation(probNet);
+                        CEAnalysis veGlobalCEA = new VECEAnalysis(probNet);
 						veGlobalCEA.setPreResolutionEvidence(preResolutionEvidence);
-						CEP cep = (CEP) ((GTablePotential) veGlobalCEA.getUtility()).elementTable.get(0);
+                        CEP cep = (CEP) veGlobalCEA.getGTablePotential().elementTable.get(0);
 						CEPDialog cepDialog = new CEPDialog(owner, cep, probNet);
 						cepDialog.setVisible(true);
 					} else if (probNet.getNetworkType() instanceof DecisionAnalysisNetworkType) {
