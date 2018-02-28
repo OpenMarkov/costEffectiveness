@@ -69,7 +69,7 @@ import javax.swing.*;
 							.getNetworkType() instanceof MIDType) {
                         CEAnalysis veGlobalCEA = new VECEAnalysis(probNet);
 						veGlobalCEA.setPreResolutionEvidence(preResolutionEvidence);
-                        CEP cep = (CEP) veGlobalCEA.getGTablePotential().elementTable.get(0);
+                        CEP cep = (CEP) veGlobalCEA.getUtility().elementTable.get(0);
 						CEPDialog cepDialog = new CEPDialog(owner, cep, probNet);
 						cepDialog.setVisible(true);
 					} else if (probNet.getNetworkType() instanceof DecisionAnalysisNetworkType) {
