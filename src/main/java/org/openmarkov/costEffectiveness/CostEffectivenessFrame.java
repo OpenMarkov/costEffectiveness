@@ -26,7 +26,7 @@ import org.openmarkov.gui.dialog.inference.common.ScopeType;
 import org.openmarkov.gui.localize.StringDatabase;
 import org.openmarkov.gui.plugin.ToolPlugin;
 import org.openmarkov.gui.window.MainPanel;
-import org.openmarkov.inference.decompositionIntoSymmetricDANs.CEADANConditionalSymmetricEvaluation;
+import org.openmarkov.inference.decompositionIntoSymmetricDANs.CEADecompositionIntoSymmetricDANsEvaluation;
 import org.openmarkov.inference.variableElimination.tasks.VECEAnalysis;
 
 import javax.swing.*;
@@ -72,7 +72,7 @@ import javax.swing.*;
 						CEPDialog cepDialog = new CEPDialog(owner, cep, probNet);
 						cepDialog.setVisible(true);
 					} else if (probNet.getNetworkType() instanceof DecisionAnalysisNetworkType) {
-                        CEAnalysis decompositionAlgorithmArticleCEA = new CEADANConditionalSymmetricEvaluation(
+                        CEAnalysis decompositionAlgorithmArticleCEA = new CEADecompositionIntoSymmetricDANsEvaluation(
                                 probNet, null, preResolutionEvidence);
                         CEP cep = (CEP) decompositionAlgorithmArticleCEA.getUtility().elementTable
 								.get(0);
