@@ -23,12 +23,13 @@ import org.jfree.ui.RectangleEdge;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.UnexpectedInferenceException;
-import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
-import org.openmarkov.gui.localize.StringDatabase;
+import org.openmarkov.core.inference.tasks.CEAnalysis;
 import org.openmarkov.core.model.network.*;
 import org.openmarkov.core.model.network.potential.GTablePotential;
 import org.openmarkov.core.model.network.potential.StrategyTree;
-import org.openmarkov.inference.variableElimination.tasks.VEEvaluation;
+import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
+import org.openmarkov.gui.localize.StringDatabase;
+import org.openmarkov.inference.variableElimination.tasks.VECEAnalysis;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -62,7 +63,7 @@ public class CEDecisionResults extends JDialog {
     /**
      * Cost-effectiveness task (conditioned on a DecisionVariable)
      */
-    private VEEvaluation veEvaluation;
+    private CEAnalysis veceAnalysis;
 
     /**
      * Conditioning decision variable
@@ -148,10 +149,10 @@ public class CEDecisionResults extends JDialog {
 
         // Run the task
 
-		veEvaluation = new VEEvaluation(probNet);
-		veEvaluation.setPreResolutionEvidence(evidenceCase);
-		veEvaluation.setDecisionVariable(decisionVariable);
-        gtablePotentialResult = (GTablePotential) veEvaluation.getUtility();
+        veceAnalysis = new VECEAnalysis(probNet);
+        veceAnalysis.setPreResolutionEvidence(evidenceCase);
+        veceAnalysis.setDecisionVariable(decisionVariable);
+        gtablePotentialResult = veceAnalysis.getUtility();
 
         hasInterventions = false;
         for (Object cep : gtablePotentialResult.elementTable) {
@@ -409,13 +410,14 @@ public class CEDecisionResults extends JDialog {
                 super.doLayout();
             }
 
-            public boolean getScrollableTracksViewportWidth()
-            {
+            @Override
+            public boolean getScrollableTracksViewportWidth() {
                 return getPreferredSize().width < getParent().getWidth();
             }
         };
 
         jtable.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent event) {
                 int row = jtable.rowAtPoint(event.getPoint());
                 int column = jtable.columnAtPoint(event.getPoint());
@@ -468,6 +470,7 @@ public class CEDecisionResults extends JDialog {
 
     private DefaultTableCellRenderer getDoubleCellRenderer(){
         DefaultTableCellRenderer doubleCellRenderer  =	new DefaultTableCellRenderer() {
+            @Override
             public Component getTableCellRendererComponent(JTable table,
                                                            Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
