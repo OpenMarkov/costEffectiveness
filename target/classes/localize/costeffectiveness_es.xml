@@ -2,53 +2,53 @@
 <properties>
     <CostEffectivenessDeterministic>
         <Label value="Análisis de coste-efectividad determinista"/>
-		<Error value="Error al realizar el análisis de coste-efectividad"/>
+        <Error value="Error al realizar el análisis de coste-efectividad"/>
     </CostEffectivenessDeterministic>
-	<CostEffectivenessResults>
-		<Title>
-			<Label value="Resultados del análisis de coste-efectividad" />
-		</Title>
-		<Cost value="Coste" />
-		<Effectiveness value="Efectividad" />
-		<Intervention value="Intervención" />
-		<ICER value="RCEI" />
-		<Scope value="Selección de escenario" />
-		<Intervals>
-			<Label value="Intervalos" />
-			<Title value = "Intervalos de coste-efectividad" />
-			<InterventionTooltip value="Haz clic para mostrar la intervención" />
-		</Intervals>
-		<Plane>
-			<Tab value="Plano de CE" />
-			<Label value="Plano de coste-efectividad" />
-		</Plane>
-		<Analysis>
-			<Tab value="Análisis" />
-		</Analysis>
-		<FrontierInterventions>
-			<Tab value="Intervenciones fronterizas" />
-		</FrontierInterventions>
-		<AcceptabilityCurve>
-			<Tab value="CACE" />
-			<Label value="Curva de aceptabilidad" />
-			<Vertical value="Probabilidad de ser coste-efectiva" />
-			<Horizontal value="Disposición a pagar" />
-		</AcceptabilityCurve>
-		<EVPI>
-			<Tab value="VEIP" />
-			<Label value="Valor esperado de la información perfecta" />
-			<Vertical value="VEIP" />
-			<Horizontal value="Disposición a pagar" />
-			<MaxRatio value="Razón máxima" />
-			<Population value="Población anual" />
-			<Lifetime value="Ciclo de vida de la tecnología" />
-			<Discount value="Tasa de descuento" />
-		</EVPI>
+    <CostEffectivenessResults>
+        <Title>
+            <Label value="Resultados del análisis de coste-efectividad"/>
+        </Title>
+        <Cost value="Coste"/>
+        <Effectiveness value="Efectividad"/>
+        <Intervention value="Intervención"/>
+        <ICER value="RCEI"/>
+        <Scope value="Selección de escenario"/>
+        <Intervals>
+            <Label value="Intervalos"/>
+            <Title value="Intervalos de coste-efectividad"/>
+            <InterventionTooltip value="Haz clic para mostrar la intervención"/>
+        </Intervals>
+        <Plane>
+            <Tab value="Plano de CE"/>
+            <Label value="Plano de coste-efectividad"/>
+        </Plane>
+        <Analysis>
+            <Tab value="Análisis"/>
+        </Analysis>
+        <FrontierInterventions>
+            <Tab value="Intervenciones fronterizas"/>
+        </FrontierInterventions>
+        <AcceptabilityCurve>
+            <Tab value="CACE"/>
+            <Label value="Curva de aceptabilidad"/>
+            <Vertical value="Probabilidad de ser coste-efectiva"/>
+            <Horizontal value="Disposición a pagar"/>
+        </AcceptabilityCurve>
+        <EVPI>
+            <Tab value="VEIP"/>
+            <Label value="Valor esperado de la información perfecta"/>
+            <Vertical value="VEIP"/>
+            <Horizontal value="Disposición a pagar"/>
+            <MaxRatio value="Razón máxima"/>
+            <Population value="Población anual"/>
+            <Lifetime value="Ciclo de vida de la tecnología"/>
+            <Discount value="Tasa de descuento"/>
+        </EVPI>
         <Controls>
-            <Display value="Mostrar:" />
-            <Absolute value="Absoluto" />
-            <Relative value="Relativo a:" />
-            <ShowHide value="Mostrar/ocultar intervenciones" />
+            <Display value="Mostrar:"/>
+            <Absolute value="Absoluto"/>
+            <Relative value="Relativo a:"/>
+            <ShowHide value="Mostrar/ocultar intervenciones"/>
         </Controls>
-	</CostEffectivenessResults>
+    </CostEffectivenessResults>
 </properties>

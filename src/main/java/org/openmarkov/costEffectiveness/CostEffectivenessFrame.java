@@ -66,16 +66,15 @@ import javax.swing.*;
 
 					if (probNet.getNetworkType() instanceof InfluenceDiagramType || probNet
 							.getNetworkType() instanceof MIDType) {
-                        CEAnalysis veGlobalCEA = new VECEAnalysis(probNet);
+						CEAnalysis veGlobalCEA = new VECEAnalysis(probNet);
 						veGlobalCEA.setPreResolutionEvidence(preResolutionEvidence);
-                        CEP cep = (CEP) veGlobalCEA.getUtility().elementTable.get(0);
+						CEP cep = (CEP) veGlobalCEA.getUtility().elementTable.get(0);
 						CEPDialog cepDialog = new CEPDialog(owner, cep, probNet);
 						cepDialog.setVisible(true);
 					} else if (probNet.getNetworkType() instanceof DecisionAnalysisNetworkType) {
-                        CEAnalysis decompositionAlgorithmArticleCEA = new CEADecompositionIntoSymmetricDANsEvaluation(
-                                probNet, null, preResolutionEvidence);
-                        CEP cep = (CEP) decompositionAlgorithmArticleCEA.getUtility().elementTable
-								.get(0);
+						CEAnalysis decompositionAlgorithmArticleCEA = new CEADecompositionIntoSymmetricDANsEvaluation(
+								probNet, null, preResolutionEvidence);
+						CEP cep = (CEP) decompositionAlgorithmArticleCEA.getUtility().elementTable.get(0);
 						CEPDialog cepDialog = new CEPDialog(owner, cep, probNet);
 						cepDialog.setVisible(true);
 					}
