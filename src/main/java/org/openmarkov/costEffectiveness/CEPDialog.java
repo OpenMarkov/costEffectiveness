@@ -180,32 +180,6 @@ import java.util.EventObject;
 	}
 
 	/**
-	 * Enumerate to use in JTable columns
-	 */
-	private enum CEPColumns {
-		LAMBDA_INF(0, "\u03BB inf."), LAMBDA_SUP(1, "\u03BB sup."), COST(2,
-				StringDatabase.getUniqueInstance().getString("CostEffectivenessResults.Cost")), EFFECTIVENESS(3,
-				StringDatabase.getUniqueInstance().getString("CostEffectivenessResults.Effectiveness")), INTERVENTION(4,
-				StringDatabase.getUniqueInstance().getString("CostEffectivenessResults.Intervention"));
-
-		private String text;
-		private int index;
-
-		CEPColumns(int index, String text) {
-			this.index = index;
-			this.text = text;
-		}
-
-		private int getIndex() {
-			return index;
-		}
-
-		public String getText() {
-			return text;
-		}
-	}
-
-	/**
 	 * @return Array of <code>String</code>s with the columns headings
 	 */
 	private String[] getColumnsStrings() {
@@ -314,16 +288,6 @@ import java.util.EventObject;
 		return lambdaRight;
 	}
 
-	public static class CellEditorNotEditable extends DefaultCellEditor {
-		public CellEditorNotEditable(JTextField textField) {
-			super(textField);
-		}
-
-		@Override public boolean isCellEditable(EventObject anEvent) {
-			return false;
-		}
-	}
-
 	private DefaultTableCellRenderer getDoubleCellRenderer() {
 		DefaultTableCellRenderer doubleCellRenderer = new DefaultTableCellRenderer() {
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
@@ -336,5 +300,41 @@ import java.util.EventObject;
 			}
 		};
 		return doubleCellRenderer;
+	}
+
+	/**
+	 * Enumerate to use in JTable columns
+	 */
+	private enum CEPColumns {
+		LAMBDA_INF(0, "\u03BB inf."), LAMBDA_SUP(1, "\u03BB sup."), COST(2,
+				StringDatabase.getUniqueInstance().getString("CostEffectivenessResults.Cost")), EFFECTIVENESS(3,
+				StringDatabase.getUniqueInstance().getString("CostEffectivenessResults.Effectiveness")), INTERVENTION(4,
+				StringDatabase.getUniqueInstance().getString("CostEffectivenessResults.Intervention"));
+
+		private String text;
+		private int index;
+
+		CEPColumns(int index, String text) {
+			this.index = index;
+			this.text = text;
+		}
+
+		private int getIndex() {
+			return index;
+		}
+
+		public String getText() {
+			return text;
+		}
+	}
+
+	public static class CellEditorNotEditable extends DefaultCellEditor {
+		public CellEditorNotEditable(JTextField textField) {
+			super(textField);
+		}
+
+		@Override public boolean isCellEditable(EventObject anEvent) {
+			return false;
+		}
 	}
 }

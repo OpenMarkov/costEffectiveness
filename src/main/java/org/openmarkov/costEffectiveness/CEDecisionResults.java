@@ -64,41 +64,41 @@ import java.util.Locale;
  */
 public class CEDecisionResults extends JDialog {
 
+	private final int COLUMN_STATE_NAME = 0;
+	private final int COLUMN_COST = 1;
+	private final int COLUMN_EFFECTIVENESS = 2;
+	private final int COLUMN_INTERVENTION = 3;
+	private final int COLUMN_ICER = 3;
+	private final String CLICKABLE_COLUMN_COLOR = "#DDF5D8";
+	private final int DEFAULT_NUM_SIGNIFICANT_NUMBERS = 5;
 	/**
 	 * ProbNet
 	 */
 	private ProbNet probNet;
-
 	/**
 	 * Cost-effectiveness task (conditioned on a DecisionVariable)
 	 */
 	private CEAnalysis veceAnalysis;
-
 	/**
 	 * Conditioning decision variable
 	 */
 	private Variable decisionVariable;
-
 	/**
 	 * Tabbed pane
 	 */
 	private JTabbedPane tabbedPane;
-
 	/**
 	 * Localized stringDatabase
 	 */
 	private StringDatabase stringDatabase = StringDatabase.getUniqueInstance();
-
 	/**
 	 * Selected minimal threshold of the cost-effectiveness partition
 	 */
 	private double selectedMinThreshold;
-
 	/**
 	 * Selected maximal threshold of the cost-effectiveness partition
 	 */
 	private double selectedMaxThreshold;
-
 	/**
 	 * Mean of min and max selected thresholds
 	 */
@@ -107,17 +107,14 @@ public class CEDecisionResults extends JDialog {
 	 * Resulting cepsForDecision (one per decision state)
 	 */
 	private CEP[] cepsForDecision;
-
 	/**
 	 * Resulting GTablePotential
 	 */
 	private GTablePotential gtablePotentialResult;
-
 	/**
 	 * Compacted? Thresholds?
 	 */
 	private List<Double> thresholdList;
-
 	/**
 	 * GUI controls
 	 */
@@ -135,18 +132,7 @@ public class CEDecisionResults extends JDialog {
 	private JPanel cePlanePanel;
 	private JPanel frontierInterventionsPanel;
 	private JPanel frontierInterventionsTablePanel;
-	private final int COLUMN_STATE_NAME = 0;
-	private final int COLUMN_COST = 1;
-	private final int COLUMN_EFFECTIVENESS = 2;
-	private final int COLUMN_INTERVENTION = 3;
-	private final int COLUMN_ICER = 3;
-	private final String CLICKABLE_COLUMN_COLOR = "#DDF5D8";
 	private boolean hasInterventions;
-	private final int DEFAULT_NUM_SIGNIFICANT_NUMBERS = 5;
-
-	private enum AnalysisTab {
-		ANALYSIS, CEPLANE, FRONTIER_INTERVENTIONS
-	}
 
 	public CEDecisionResults(Window owner, ProbNet probNet, EvidenceCase evidenceCase, Variable decisionVariable)
 			throws NotEvaluableNetworkException, IncompatibleEvidenceException, UnexpectedInferenceException {
@@ -1001,6 +987,10 @@ public class CEDecisionResults extends JDialog {
 		dataset.addSeries(frontierInterventionsSerie);
 
 		return dataset;
+	}
+
+	private enum AnalysisTab {
+		ANALYSIS, CEPLANE, FRONTIER_INTERVENTIONS
 	}
 
 }
