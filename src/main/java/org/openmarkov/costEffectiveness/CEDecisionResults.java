@@ -916,9 +916,7 @@ public class CEDecisionResults extends JDialog {
 		if (relativeRadioButton.isSelected()) {
 			int indexSelected = relativeDecisionSelector.getSelectedIndex();
 			baseCost = cepsForDecision[indexSelected].getCost(meanThreshold);
-			;
 			baseEffectiveness = cepsForDecision[indexSelected].getEffectiveness(meanThreshold);
-			;
 
 			// Absolute
 		} else {
@@ -964,9 +962,7 @@ public class CEDecisionResults extends JDialog {
 		if (relativeRadioButton.isSelected()) {
 			int indexSelected = relativeDecisionSelector.getSelectedIndex();
 			baseCost = cepsForDecision[indexSelected].getCost(meanThreshold);
-			;
 			baseEffectiveness = cepsForDecision[indexSelected].getEffectiveness(meanThreshold);
-			;
 
 			// Absolute
 		} else {
