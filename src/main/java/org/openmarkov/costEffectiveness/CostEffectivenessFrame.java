@@ -20,6 +20,7 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.type.DecisionAnalysisNetworkType;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.core.model.network.type.MIDType;
+import org.openmarkov.gui.dialog.costeffectiveness.CEPDialog;
 import org.openmarkov.gui.dialog.inference.common.InferenceOptionsDialog;
 import org.openmarkov.gui.dialog.inference.common.ScopeSelectorPanel;
 import org.openmarkov.gui.dialog.inference.common.ScopeType;
