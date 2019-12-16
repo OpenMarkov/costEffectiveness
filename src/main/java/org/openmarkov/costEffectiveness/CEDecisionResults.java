@@ -856,7 +856,7 @@ public class CEDecisionResults extends JDialog {
 	/**
 	 * Get cost-effectiveness plane chart
 	 *
-	 * @return
+	 * @return cost-effectiveness plane chart
 	 */
 	public ChartPanel getCEPlaneChartPanel() {
 		// JFreeChart attributes definition
