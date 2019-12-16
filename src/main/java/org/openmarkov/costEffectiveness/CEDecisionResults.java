@@ -236,7 +236,7 @@ public class CEDecisionResults extends JDialog {
 	/**
 	 * Gets the cost-effectiveness plane
 	 *
-	 * @return
+	 * @return cost-effectiveness plane
 	 */
 	public JPanel getCEPlanePanel() {
 		cePlanePanel = new JPanel();
@@ -251,7 +251,7 @@ public class CEDecisionResults extends JDialog {
 	/**
 	 * Gets the frontier interventions panel
 	 *
-	 * @return
+	 * @return frontier interventions panel
 	 */
 	public JPanel getFrontierInterventionsPanel() {
 		frontierInterventionsPanel = new JPanel();
@@ -266,7 +266,7 @@ public class CEDecisionResults extends JDialog {
 	/**
 	 * Get the intervals panel with all the compact intervals
 	 *
-	 * @return
+	 * @return intervals panel with all the compact intervals
 	 */
 	public JScrollPane getIntervalsPanel(final AnalysisTab analysisTab) {
 
@@ -351,7 +351,7 @@ public class CEDecisionResults extends JDialog {
 	/**
 	 * Get the Panel with the JTable
 	 *
-	 * @return
+	 * @return Panel with the JTable
 	 */
 	public JPanel getAnalysisTablePanel() {
 		analysisTablePanel = new JPanel();
@@ -362,7 +362,7 @@ public class CEDecisionResults extends JDialog {
 	/**
 	 * Get the Panel with the JTable
 	 *
-	 * @return
+	 * @return Panel with the JTable
 	 */
 	public JPanel getFrontierInterventionsTablePanel() {
 		frontierInterventionsTablePanel = new JPanel();
@@ -373,7 +373,7 @@ public class CEDecisionResults extends JDialog {
 	/**
 	 * Get the table with the CEPs
 	 *
-	 * @return
+	 * @return table with the CEPs
 	 */
 	public JTable getAnalysisTable() {
 		// Add one for the header
@@ -479,7 +479,7 @@ public class CEDecisionResults extends JDialog {
 	/**
 	 * Get the table with the CEPs
 	 *
-	 * @return
+	 * @return table with the CEPs
 	 */
 	public JTable getFrontierInterventionsTable() {
 
@@ -547,7 +547,7 @@ public class CEDecisionResults extends JDialog {
 	/**
 	 * Calculate the frontier interventions
 	 *
-	 * @return
+	 * @return List of frontier interventions
 	 */
 	public List<CEP> calculateFrontierInterventions(AnalysisTab analysisTab) {
 		ArrayList<CEP> remainingInterventions = new ArrayList<>();
@@ -638,7 +638,7 @@ public class CEDecisionResults extends JDialog {
 	/**
 	 * Get column names
 	 *
-	 * @return
+	 * @return column names
 	 */
 	public String[] getColumns(AnalysisTab analysisTab) {
 		String[] columnNames;
@@ -667,7 +667,7 @@ public class CEDecisionResults extends JDialog {
 	/**
 	 * Build the right column with both panels
 	 *
-	 * @return
+	 * @return right column with both panels
 	 */
 	public JPanel getAbsRelShowHidePanel(AnalysisTab analysisTab) {
 		JPanel absRelShowHidePanel = new JPanel();
@@ -681,7 +681,7 @@ public class CEDecisionResults extends JDialog {
 	/**
 	 * Returns the scroll pane with the absolute/relative functionality
 	 *
-	 * @return
+	 * @return the scroll pane with the absolute/relative functionality
 	 */
 	public JPanel getAbsoluteRelativePanel() {
 		JPanel absoluteRelativePanel = new JPanel();
@@ -740,7 +740,7 @@ public class CEDecisionResults extends JDialog {
 	/**
 	 * Returns the scroll pane with the show/hide functionality
 	 *
-	 * @return
+	 * @return scroll pane with the show/hide functionality
 	 */
 	public JScrollPane getShowHidePanel(final AnalysisTab analysisTab) {
 		JPanel showHidePanel = new JPanel();
@@ -905,7 +905,7 @@ public class CEDecisionResults extends JDialog {
 	/**
 	 * Get the scatter plot data from selected interventions
 	 *
-	 * @return
+	 * @return scatter plot data from selected interventions
 	 */
 	public XYSeriesCollection getScatterPlotData() {
 		XYSeriesCollection dataset = new XYSeriesCollection();
@@ -950,7 +950,7 @@ public class CEDecisionResults extends JDialog {
 	/**
 	 * Get frontier interventions lines
 	 *
-	 * @return
+	 * @return frontier interventions lines
 	 */
 	public XYSeriesCollection getLineFrontierInterventionsData() {
 		XYSeriesCollection dataset = new XYSeriesCollection();
