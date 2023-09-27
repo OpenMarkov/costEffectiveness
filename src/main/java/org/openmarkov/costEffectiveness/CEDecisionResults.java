@@ -280,7 +280,7 @@ public class CEDecisionResults extends JDialog {
 		for (int i = 0; i < gtablePotentialResult.elementTable.size(); i++) {
 			CEP cep = (CEP) gtablePotentialResult.elementTable.get(i);
 			cepsForDecision[i] = cep;
-			if (cep.getNumIntervals() != 1) {
+			if (cep.getNumIntervals() > 1) {
 				moreThanOneInterval = true;
 				for (double threshold : cep.getThresholds()) {
 					thresholds.add(threshold);
@@ -496,29 +496,26 @@ public class CEDecisionResults extends JDialog {
 		// Set data in jTable
 		Object[][] values = new Object[numRows][numColumns];
 
+		double previousCost, actualCost = 0;
+		double previousEffectiveness, actualEfectiveness = 0;
+
 		for (int row = 0; row < numRows; row++) {
 			// Set decision variable state name
 			values[row][COLUMN_STATE_NAME] = interventionsNames[row];
 
-			// Set costs and effectiveness for that decision state
-			values[row][COLUMN_COST] = frontierInterventions.get(row).getCost(meanThreshold);
-			values[row][COLUMN_EFFECTIVENESS] = frontierInterventions.get(row).getEffectiveness(meanThreshold);
+			previousCost = actualCost;
+			previousEffectiveness = actualEfectiveness;
+
+			// Set costs and meanEffectiveness for that decision state
+			values[row][COLUMN_COST] = actualCost = frontierInterventions.get(row).getCost(meanThreshold);
+			values[row][COLUMN_EFFECTIVENESS] = actualEfectiveness = frontierInterventions.get(row).getEffectiveness(meanThreshold);
 
 			// Set the ICER between the first (cheaper) intervention and the current intervention
-			double icer = 0;
+			double icer = 0.0;
 			if (row != 0) {
-				CEP cheapestIntervention = frontierInterventions.get(0);
-				double costDif = (
-						BigDecimal.valueOf(frontierInterventions.get(row).getCost(meanThreshold)).
-								subtract(BigDecimal.valueOf(cheapestIntervention.getCost(meanThreshold)))
-				).doubleValue();
-				double effDif = (
-						BigDecimal.valueOf(frontierInterventions.get(row).getEffectiveness(meanThreshold)).
-								subtract(BigDecimal.valueOf(cheapestIntervention.getEffectiveness(meanThreshold)))
-				).doubleValue();
-				icer = costDif / effDif;
+				icer = (actualCost - previousCost) / (actualEfectiveness - previousEffectiveness);
 			}
-			values[row][COLUMN_ICER] = new Double(icer);
+			values[row][COLUMN_ICER] = icer == 0.0 ? "--" : icer;
 		}
 
 		JTable jtable = new JTable(values, getColumns(AnalysisTab.FRONTIER_INTERVENTIONS));
