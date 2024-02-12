@@ -19,7 +19,7 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.ui.RectangleEdge;
+import org.jfree.chart.ui.RectangleEdge;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.UnexpectedInferenceException;
@@ -894,7 +894,9 @@ public class CEDecisionResults extends JDialog {
 		XYItemRenderer renderer = plot.getRenderer();
 		NumberFormat format = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.US));
 		XYToolTipGenerator generator = new StandardXYToolTipGenerator("{0}: ({1}, {2})", format, format);
-		renderer.setBaseToolTipGenerator(generator);
+		 // TODO Manolo> When migrating to JFreeChart 1.5, I have replaced the call to the method setBaseToolTipGenerator by the new method setDefaultToolTipGenerator  
+        //renderer.setBaseToolTipGenerator(generator);
+        renderer.setDefaultToolTipGenerator(generator);
 
 		return ceChartPanel;
 	}
