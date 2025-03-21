@@ -8,8 +8,8 @@ module org.openmarkov.costeffectiveness {
 	requires org.openmarkov.inference.variableelimination;
 		
 	exports org.openmarkov.costEffectiveness;
-	
-	provides org.openmarkov.gui.localize.spi.LocalizeResourcesProvider with org.openmarkov.costEffectiveness.CostEffectivenessResourceBundleProvider;
+    
+    provides org.openmarkov.gui.localize.spi.LocalizeResourcesProvider with org.openmarkov.costEffectiveness.localize.CostEffectivenessResourceBundleProvider;
 	/*
 	 * requires org.openmarkov.gui; requires org.jfree.jfreechart; requires
 	 * org.openmarkov.inference.variableelimination; requires java.desktop; requires
