@@ -6,9 +6,12 @@ module org.openmarkov.costeffectiveness {
 	requires swing.layout;
 	requires org.jfree.jfreechart;
 	requires org.openmarkov.inference.variableelimination;
-		
-	exports org.openmarkov.costEffectiveness;
+	requires org.jetbrains.annotations;
+    requires java.desktop;
     
+    exports org.openmarkov.costEffectiveness;
+    exports org.openmarkov.costEffectiveness.localize;
+	
     provides org.openmarkov.gui.localize.spi.LocalizeResourcesProvider with org.openmarkov.costEffectiveness.localize.CostEffectivenessResourceBundleProvider;
 	/*
 	 * requires org.openmarkov.gui; requires org.jfree.jfreechart; requires
