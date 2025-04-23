@@ -8,6 +8,7 @@ module org.openmarkov.costeffectiveness {
 	requires org.openmarkov.inference.variableelimination;
 	requires org.jetbrains.annotations;
     requires java.desktop;
+    requires org.openmarkov.annotation_processing;
     
     exports org.openmarkov.costEffectiveness;
     exports org.openmarkov.costEffectiveness.localize;
