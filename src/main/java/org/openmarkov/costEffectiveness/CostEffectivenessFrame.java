@@ -27,8 +27,8 @@ import org.openmarkov.gui.dialog.inference.common.ScopeType;
 import org.openmarkov.gui.localize.StringDatabase;
 import org.openmarkov.gui.plugin.ToolPlugin;
 import org.openmarkov.gui.window.MainPanel;
-import org.openmarkov.inference.decompositionIntoSymmetricDANs.ceanalysis.DANDecompositionIntoSymmetricDANsCEA;
-import org.openmarkov.inference.variableElimination.tasks.VECEAnalysis;
+import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.ceanalysis.DANDecompositionIntoSymmetricDANsCEA;
+import org.openmarkov.inference.algorithm.variableElimination.tasks.VECEAnalysis;
 
 import javax.swing.*;
 
