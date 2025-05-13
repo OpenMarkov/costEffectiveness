@@ -34,7 +34,7 @@ import org.openmarkov.core.model.network.potential.GTablePotential;
 import org.openmarkov.core.model.network.potential.StrategyTree;
 import org.openmarkov.gui.dialog.costeffectiveness.InterventionDialog;
 import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
-import org.openmarkov.gui.localize.StringDatabase;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VECEAnalysis;
 
 import javax.swing.*;

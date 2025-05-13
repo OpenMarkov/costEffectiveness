@@ -24,7 +24,7 @@ import org.openmarkov.gui.dialog.costeffectiveness.CEPDialog;
 import org.openmarkov.gui.dialog.inference.common.InferenceOptionsDialog;
 import org.openmarkov.gui.dialog.inference.common.ScopeSelectorPanel;
 import org.openmarkov.gui.dialog.inference.common.ScopeType;
-import org.openmarkov.gui.localize.StringDatabase;
+import org.openmarkov.core.localize.StringDatabase;
 import org.openmarkov.gui.plugin.ToolPlugin;
 import org.openmarkov.gui.window.MainPanel;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.ceanalysis.DANDecompositionIntoSymmetricDANsCEA;

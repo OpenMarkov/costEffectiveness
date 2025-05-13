@@ -12,5 +12,5 @@ module org.openmarkov.costeffectiveness {
     exports org.openmarkov.costEffectiveness.localize;
     exports org.openmarkov.costEffectiveness;
 
-    provides org.openmarkov.gui.localize.spi.LocalizeResourcesProvider with org.openmarkov.costEffectiveness.localize.CostEffectivenessResourceBundleProvider;
+    provides org.openmarkov.core.localize.spi.LocalizeResourcesProvider with org.openmarkov.costEffectiveness.localize.CostEffectivenessResourceBundleProvider;
 }
