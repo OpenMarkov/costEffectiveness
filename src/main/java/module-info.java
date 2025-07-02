@@ -1,4 +1,4 @@
-module org.openmarkov.costeffectiveness {
+open module org.openmarkov.costeffectiveness {
     requires java.desktop;
     requires org.apache.commons.io;
     requires org.jetbrains.annotations;
