@@ -424,14 +424,8 @@ public class CEDecisionResults extends JDialog {
 
 					if (strategyTree != null) {
 						InterventionDialog interventionDialog = null;
-						try {
-							interventionDialog = new InterventionDialog(getOwner(), probNet, strategyTree);
-						} catch (IncompatibleEvidenceException e) {
-							e.printStackTrace();
-						} catch (UnexpectedInferenceException e) {
-							e.printStackTrace();
-						}
-						interventionDialog.setVisible(true);
+                        interventionDialog = new InterventionDialog(getOwner(), probNet, strategyTree);
+                        interventionDialog.setVisible(true);
 					}
 				}
 			}

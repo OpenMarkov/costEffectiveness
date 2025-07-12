@@ -82,7 +82,7 @@ public class CostEffectivenessFrame {
                     for (Finding finding : scopeSelectorPanel.getSelectedFindings()) {
                         try {
                             newPreResolutionEvidence.addFinding(finding);
-                        } catch (InvalidStateException | IncompatibleEvidenceException e) {
+                        } catch (IncompatibleEvidenceException e) {
                             JOptionPane.showMessageDialog(null, e.getMessage(), StringDatabase.getUniqueInstance()
                                                                                               .getString("LoadEvidence.Error.IncompatibleEvidence"), JOptionPane.ERROR_MESSAGE);
                         }
