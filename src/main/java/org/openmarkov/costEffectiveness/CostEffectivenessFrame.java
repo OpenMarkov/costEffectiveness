@@ -9,6 +9,7 @@ package org.openmarkov.costEffectiveness;
 
 import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.UnexpectedInferenceException;
 import org.openmarkov.core.inference.MulticriteriaOptions;
@@ -81,7 +82,7 @@ public class CostEffectivenessFrame {
                     for (Finding finding : scopeSelectorPanel.getSelectedFindings()) {
                         try {
                             newPreResolutionEvidence.addFinding(finding);
-                        } catch (IncompatibleEvidenceException e) {
+                        } catch (IncompatibleEvidenceException.EvidenceIsIncompatibleWithOther e) {
                             JOptionPane.showMessageDialog(null, e.getMessage(), StringDatabase.getUniqueInstance()
                                                                                               .getString("LoadEvidence.Error.IncompatibleEvidence"), JOptionPane.ERROR_MESSAGE);
                         }
@@ -89,13 +90,13 @@ public class CostEffectivenessFrame {
                     new CEDecisionResults(owner, probNet, newPreResolutionEvidence,
                                           scopeSelectorPanel.getDecisionSelected());
                 }
-            } catch (NotEvaluableNetworkException e) {
+            } catch (NotEvaluableNetworkException.NotApplicableNetwork|NotEvaluableNetworkException.UnsatisfiedContraints e) {
                 JOptionPane.showMessageDialog(null,
                                               StringDatabase.getUniqueInstance()
                                                             .getString("CostEffectivenessDeterministic.Error") + ". " + e
                                                       .getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
-            } catch (IncompatibleEvidenceException | UnexpectedInferenceException e) {
+            } catch (NonProjectablePotentialException | IncompatibleEvidenceException e) {
                 e.printStackTrace();
             }
         }

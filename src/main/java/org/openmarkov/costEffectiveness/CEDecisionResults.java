@@ -21,6 +21,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.chart.ui.RectangleEdge;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
+import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
 import org.openmarkov.core.exception.UnexpectedInferenceException;
 import org.openmarkov.core.inference.tasks.CEAnalysis;
@@ -136,7 +137,7 @@ public class CEDecisionResults extends JDialog {
 	private boolean hasInterventions;
 
 	public CEDecisionResults(Window owner, ProbNet probNet, EvidenceCase evidenceCase, Variable decisionVariable)
-			throws NotEvaluableNetworkException, IncompatibleEvidenceException, UnexpectedInferenceException {
+			throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedContraints {
 		super(owner);
 		this.probNet = probNet;
 		this.decisionVariable = decisionVariable;

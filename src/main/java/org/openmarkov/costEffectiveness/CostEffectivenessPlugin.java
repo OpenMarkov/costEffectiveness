@@ -2,9 +2,9 @@ package org.openmarkov.costEffectiveness;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.openmarkov.core.exception.OpenMarkovException;
-import org.openmarkov.core.localize.LocalizedException;
 import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.gui.dialog.ExceptionDialog;
+import org.openmarkov.gui.exception.NoNetOpenedException;
 import org.openmarkov.gui.toolplugin.ToolPlugin;
 import org.openmarkov.gui.window.MainPanel;
 
@@ -18,7 +18,7 @@ public final class CostEffectivenessPlugin implements ToolPlugin {
     
     @Override public void showDialog(@Nullable JFrame parent) {
         if (MainPanel.getUniqueInstance().getMainPanelListenerAssistant().getCurrentNetworkPanel() == null) {
-            new LocalizedException(new OpenMarkovException("Exception.NoNet"), parent).showException();
+            ExceptionDialog.show(new NoNetOpenedException());
             return;
         }
         var dialog = new CostEffectivenessFrame(parent).getCepDialog();
