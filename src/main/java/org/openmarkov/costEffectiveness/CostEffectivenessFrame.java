@@ -11,7 +11,6 @@ import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
-import org.openmarkov.core.exception.UnexpectedInferenceException;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.inference.tasks.CEAnalysis;
 import org.openmarkov.core.localize.StringDatabase;
@@ -22,6 +21,7 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.type.DecisionAnalysisNetworkType;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.core.model.network.type.MIDType;
+import org.openmarkov.gui.dialog.common.OkCancelHorizontalDialog;
 import org.openmarkov.gui.dialog.costeffectiveness.CEPDialog;
 import org.openmarkov.gui.dialog.inference.common.InferenceOptionsDialog;
 import org.openmarkov.gui.dialog.inference.common.ScopeSelectorPanel;
@@ -56,15 +56,15 @@ public class CostEffectivenessFrame {
                                                       .getPreResolutionEvidence();
         InferenceOptionsDialog inferenceOptionsDialog = new InferenceOptionsDialog(probNet, owner,
                                                                                    MulticriteriaOptions.Type.COST_EFFECTIVENESS);
-        if (inferenceOptionsDialog.getSelectedButton() != InferenceOptionsDialog.OK_BUTTON) {
+        if (inferenceOptionsDialog.getSelectedButton() != OkCancelHorizontalDialog.OK_BUTTON) {
             return;
         }
         CostEffectivenessDialog costEffectivenessDialog = new CostEffectivenessDialog(owner, probNet,
                                                                                       preResolutionEvidence);
-        if ((costEffectivenessDialog.requestData() == CostEffectivenessDialog.OK_BUTTON)) {
+        if ((costEffectivenessDialog.requestData() == OkCancelHorizontalDialog.OK_BUTTON)) {
             ScopeSelectorPanel scopeSelectorPanel = costEffectivenessDialog.getScopeSelectorPanel();
             try {
-                if (scopeSelectorPanel.getScopeType().equals(ScopeType.GLOBAL)) {
+                if (scopeSelectorPanel.getScopeType() == ScopeType.GLOBAL) {
                     if (probNet.getNetworkType() instanceof InfluenceDiagramType || probNet
                             .getNetworkType() instanceof MIDType) {
                         CEAnalysis veGlobalCEA = new VECEAnalysis(probNet);

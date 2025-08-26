@@ -23,7 +23,6 @@ import org.jfree.chart.ui.RectangleEdge;
 import org.openmarkov.core.exception.IncompatibleEvidenceException;
 import org.openmarkov.core.exception.NonProjectablePotentialException;
 import org.openmarkov.core.exception.NotEvaluableNetworkException;
-import org.openmarkov.core.exception.UnexpectedInferenceException;
 import org.openmarkov.core.inference.tasks.CEAnalysis;
 import org.openmarkov.core.model.network.CEP;
 import org.openmarkov.core.model.network.EvidenceCase;
@@ -65,14 +64,14 @@ import java.util.Locale;
  * @author jperez-martin
  */
 public class CEDecisionResults extends JDialog {
-
-	private final int COLUMN_STATE_NAME = 0;
-	private final int COLUMN_COST = 1;
-	private final int COLUMN_EFFECTIVENESS = 2;
-	private final int COLUMN_INTERVENTION = 3;
-	private final int COLUMN_ICER = 3;
-	private final String CLICKABLE_COLUMN_COLOR = "#DDF5D8";
-	private final int DEFAULT_NUM_SIGNIFICANT_NUMBERS = 5;
+    
+    private static final int COLUMN_STATE_NAME = 0;
+    private static final int COLUMN_COST = 1;
+    private static final int COLUMN_EFFECTIVENESS = 2;
+    private static final int COLUMN_INTERVENTION = 3;
+    private static final int COLUMN_ICER = 3;
+    private static final String CLICKABLE_COLUMN_COLOR = "#DDF5D8";
+    private static final int DEFAULT_NUM_SIGNIFICANT_NUMBERS = 5;
 	/**
 	 * ProbNet
 	 */
@@ -424,8 +423,7 @@ public class CEDecisionResults extends JDialog {
 					StrategyTree strategyTree = cepsForDecision[row].getIntervention(meanThreshold);
 
 					if (strategyTree != null) {
-						InterventionDialog interventionDialog = null;
-                        interventionDialog = new InterventionDialog(getOwner(), probNet, strategyTree);
+                        InterventionDialog interventionDialog = new InterventionDialog(getOwner(), probNet, strategyTree);
                         interventionDialog.setVisible(true);
 					}
 				}
@@ -559,8 +557,8 @@ public class CEDecisionResults extends JDialog {
 				}
 			}
 		}
-
-		if (remainingInterventions.size() == 0) {
+        
+        if (remainingInterventions.isEmpty()) {
 			return frontierInterventions;
 		}
 
