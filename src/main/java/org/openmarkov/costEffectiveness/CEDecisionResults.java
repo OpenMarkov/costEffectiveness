@@ -500,8 +500,10 @@ public class CEDecisionResults extends JDialog {
 			previousEffectiveness = actualEfectiveness;
 
 			// Set costs and meanEffectiveness for that decision state
-			values[row][COLUMN_COST] = actualCost = frontierInterventions.get(row).getCost(meanThreshold);
-			values[row][COLUMN_EFFECTIVENESS] = actualEfectiveness = frontierInterventions.get(row).getEffectiveness(meanThreshold);
+            actualCost = frontierInterventions.get(row).getCost(meanThreshold);
+            values[row][COLUMN_COST] = actualCost;
+            actualEfectiveness = frontierInterventions.get(row).getEffectiveness(meanThreshold);
+            values[row][COLUMN_EFFECTIVENESS] = actualEfectiveness;
 
 			// Set the ICER between the first (cheaper) intervention and the current intervention
 			double icer = 0.0;
