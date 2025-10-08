@@ -40,7 +40,7 @@ public final class CostEffectivenessPlugin implements ToolPlugin {
     
     @Override public void showDialog(@Nullable JFrame parent) throws NonProjectablePotentialException,
             IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork,
-            NotEvaluableNetworkException.UnsatisfiedContraints, NoNetOpenedException {
+            NotEvaluableNetworkException.UnsatisfiedContraints, NoNetOpenedException, PotentialOperationException.DifferentSizesInPotentialsAndStates, NotSupportedOperationException {
         if (MainPanel.getCurrentProbNet() == null) {
             throw new NoNetOpenedException();
         }
