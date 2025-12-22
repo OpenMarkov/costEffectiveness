@@ -18,6 +18,7 @@ import org.openmarkov.gui.dialog.inference.common.InferenceOptionsDialog;
 import org.openmarkov.gui.dialog.inference.common.ScopeSelectorPanel;
 import org.openmarkov.gui.exception.NoNetOpenedException;
 import org.openmarkov.gui.toolplugin.ToolPlugin;
+import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.gui.window.MainPanel;
 import org.openmarkov.inference.algorithm.decompositionIntoSymmetricDANs.ceanalysis.DANDecompositionIntoSymmetricDANsCEA;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VECEAnalysis;
@@ -27,7 +28,7 @@ import javax.swing.*;
 public final class CostEffectivenessPlugin implements ToolPlugin {
     
     @Override public @NotNull String menuOptionText() {
-        return StringDatabase.getUniqueInstance().getString("Menus", "Tools.CostEffectiveness.Label");
+        return StringDatabase.getUniqueInstance().getString("Menus", "Tools.CostEffectiveness");
     }
     
     @Override public @NotNull ToolPluginGroup pluginGroup() {
@@ -45,7 +46,7 @@ public final class CostEffectivenessPlugin implements ToolPlugin {
             throw new NoNetOpenedException();
         }
         ProbNet probNet = MainPanel.getCurrentProbNet();
-        EvidenceCase preResolutionEvidence = MainPanel.getUniqueInstance()
+        EvidenceCase preResolutionEvidence = MainGUI.INSTANCE.mainPanel
                                                       .getMainPanelMenuAssistant()
                                                       .getCurrentNetworkPanel()
                                                       .getEditorPanel()

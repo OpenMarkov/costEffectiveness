@@ -1,26 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <properties>
-    <CostEffectivenessDeterministic>
-        <Label value="Deterministic cost-effectiveness analysis"/>
+    <CostEffectivenessDeterministic value="Deterministic cost-effectiveness analysis">
         <Error value="Error while trying to perform cost-effectiveness analysis"/>
     </CostEffectivenessDeterministic>
     <CostEffectivenessResults>
-        <Title>
-            <Label value="Cost-Effectiveness Analisys Results"/>
-        </Title>
+        <Title value="Cost-Effectiveness Analisys Results"/>
         <Cost value="Cost"/>
         <Effectiveness value="Effectiveness"/>
         <Intervention value="Intervention"/>
         <ICER value="ICER"/>
         <Scope value="Scope selector"/>
-        <Intervals>
-            <Label value="Intervals"/>
+        <Intervals value="Intervals">
             <Title value="Cost-effectiveness intervals"/>
             <InterventionTooltip value="Click to show intervention"/>
         </Intervals>
-        <Plane>
+        <Plane value="Cost-Effectiveness Plane">
             <Tab value="CE Plane"/>
-            <Label value="Cost-Effectiveness Plane"/>
         </Plane>
         <Analysis>
             <Tab value="Analysis"/>
@@ -28,15 +23,13 @@
         <FrontierInterventions>
             <Tab value="Frontier interventions"/>
         </FrontierInterventions>
-        <AcceptabilityCurve>
+        <AcceptabilityCurve value="Acceptability Curve">
             <Tab value="CEAC"/>
-            <Label value="Acceptability Curve"/>
             <Vertical value="Probability of being cost-effective"/>
             <Horizontal value="Willingness to pay"/>
         </AcceptabilityCurve>
-        <EVPI>
+        <EVPI value="Expected Value of Information">
             <Tab value="EVPI"/>
-            <Label value="Expected Value of Information"/>
             <Vertical value="EVPI"/>
             <Horizontal value="Willingness to pay"/>
             <MaxRatio value="Max ratio"/>

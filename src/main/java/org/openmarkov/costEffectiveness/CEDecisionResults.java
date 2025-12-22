@@ -182,7 +182,7 @@ public class CEDecisionResults extends JDialog {
 	 */
 	private void initialize() {
 		this.setTitle(
-				"OpenMarkov - " + stringDatabase.getString("CostEffectivenessResults.Title.Label") + " - " + probNet
+                "OpenMarkov - " + stringDatabase.getString("CostEffectivenessResults.Title") + " - " + probNet
 						.getName());
 		this.setIconImage(OpenMarkovLogoIcon.getUniqueInstance().getOpenMarkovLogoIconImage16());
 		setContentPane(getJContentPane());
@@ -292,7 +292,7 @@ public class CEDecisionResults extends JDialog {
 		// If there are more than one interval, is necessary get the compact intervals and paint it into the panel
 		if (moreThanOneInterval) {
 			intervalsPanel
-					.setBorder(new TitledBorder(stringDatabase.getString("CostEffectivenessResults.Intervals.Label")));
+                    .setBorder(new TitledBorder(stringDatabase.getString("CostEffectivenessResults.Intervals")));
 			intervalsPanel.setLayout(new BoxLayout(intervalsPanel, BoxLayout.PAGE_AXIS));
 
 			thresholdList = new ArrayList<>(thresholds);
@@ -877,7 +877,7 @@ public class CEDecisionResults extends JDialog {
 		// Set the line data, renderer, and axis into plot
 		plot.setDataset(1, collection2);
 		plot.setRenderer(1, renderer2);
-		JFreeChart chart = new JFreeChart(stringDatabase.getString("CostEffectivenessResults.Plane.Label"), plot);
+        JFreeChart chart = new JFreeChart(stringDatabase.getString("CostEffectivenessResults.Plane"), plot);
 
 		// Set general aspects
 		chart.getLegend().setPosition(RectangleEdge.RIGHT);
