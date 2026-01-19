@@ -39,12 +39,13 @@ public final class CostEffectivenessPlugin implements ToolPlugin {
         return 0;
     }
     
+    @Override public boolean enabled() {
+        return MainPanel.getCurrentProbNet() != null;
+    }
+    
     @Override public void showDialog(@Nullable JFrame parent) throws NonProjectablePotentialException,
             IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork,
             NotEvaluableNetworkException.UnsatisfiedContraints, NoNetOpenedException, PotentialOperationException.DifferentSizesInPotentialsAndStates, NotSupportedOperationException, ConstraintViolatedException {
-        if (MainPanel.getCurrentProbNet() == null) {
-            throw new NoNetOpenedException();
-        }
         ProbNet probNet = MainPanel.getCurrentProbNet();
         EvidenceCase preResolutionEvidence = MainGUI.INSTANCE.mainPanel
                                                       .getMainPanelMenuAssistant()
