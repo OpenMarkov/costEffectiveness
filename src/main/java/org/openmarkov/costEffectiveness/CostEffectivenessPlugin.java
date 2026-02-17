@@ -1,7 +1,6 @@
 package org.openmarkov.costEffectiveness;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.openmarkov.core.exception.*;
 import org.openmarkov.core.inference.MulticriteriaOptions;
 import org.openmarkov.core.localize.StringDatabase;
@@ -12,11 +11,11 @@ import org.openmarkov.core.model.network.ProbNet;
 import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.core.model.network.type.MIDType;
 import org.openmarkov.core.model.network.type.NetworkType;
+import org.openmarkov.gui.componentBuilder.JMenuItemBuilder;
 import org.openmarkov.gui.dialog.common.OkCancelHorizontalDialog;
 import org.openmarkov.gui.dialog.costeffectiveness.CEPDialog;
 import org.openmarkov.gui.dialog.inference.common.InferenceOptionsDialog;
 import org.openmarkov.gui.dialog.inference.common.ScopeSelectorPanel;
-import org.openmarkov.gui.exception.NoNetOpenedException;
 import org.openmarkov.gui.toolplugin.ToolPlugin;
 import org.openmarkov.gui.window.MainGUI;
 import org.openmarkov.gui.window.MainPanel;
@@ -27,10 +26,6 @@ import javax.swing.*;
 
 public final class CostEffectivenessPlugin implements ToolPlugin {
     
-    @Override public @NotNull String menuOptionText() {
-        return StringDatabase.getUniqueInstance().getString("Menus", "Tools.CostEffectiveness");
-    }
-    
     @Override public @NotNull ToolPluginGroup pluginGroup() {
         return ToolPluginGroup.ANALYSIS;
     }
@@ -39,13 +34,19 @@ public final class CostEffectivenessPlugin implements ToolPlugin {
         return 0;
     }
     
-    @Override public boolean enabled() {
+    public boolean enabled() {
         return MainPanel.getCurrentProbNet() != null;
     }
     
-    @Override public void showDialog(@Nullable JFrame parent) throws NonProjectablePotentialException,
-            IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork,
-            NotEvaluableNetworkException.UnsatisfiedContraints, NoNetOpenedException, PotentialOperationException.DifferentSizesInPotentialsAndStates, NotSupportedOperationException, ConstraintViolatedException {
+    @Override public JMenuItem toMenuItem() {
+        return new JMenuItemBuilder(StringDatabase.getUniqueInstance().getString("Menus", "Tools.CostEffectiveness"))
+                .enabled(MainPanel.getCurrentProbNet() != null)
+                .onClick(CostEffectivenessPlugin::onClick)
+                .build();
+    }
+    
+    private static void onClick() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedContraints, ConstraintViolatedException, PotentialOperationException.DifferentSizesInPotentialsAndStates, NotSupportedOperationException {
+        JFrame parent = MainGUI.INSTANCE.mainPanel.getMainFrame();
         ProbNet probNet = MainPanel.getCurrentProbNet();
         EvidenceCase preResolutionEvidence = MainGUI.INSTANCE.mainPanel
                                                       .getMainPanelMenuAssistant()
