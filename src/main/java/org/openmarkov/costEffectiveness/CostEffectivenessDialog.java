@@ -10,7 +10,7 @@ package org.openmarkov.costEffectiveness;
 import org.apache.commons.io.FilenameUtils;
 import org.openmarkov.core.model.network.EvidenceCase;
 import org.openmarkov.core.model.network.ProbNet;
-import org.openmarkov.gui.dialog.common.OkCancelHorizontalDialog;
+import org.openmarkov.gui.dialog.common.OkCancelDialog;
 import org.openmarkov.gui.dialog.inference.common.ScopeSelectorPanel;
 
 import javax.swing.*;
@@ -24,7 +24,7 @@ import java.awt.*;
  *
  * @author myebra
  */
-public class CostEffectivenessDialog extends OkCancelHorizontalDialog {
+public class CostEffectivenessDialog extends OkCancelDialog {
 	private static final long serialVersionUID = 1L;
 	private ProbNet probNet;
 	private ScopeSelectorPanel scopeSelectorPanel;

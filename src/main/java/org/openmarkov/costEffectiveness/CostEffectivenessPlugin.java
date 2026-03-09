@@ -12,7 +12,7 @@ import org.openmarkov.core.model.network.type.InfluenceDiagramType;
 import org.openmarkov.core.model.network.type.MIDType;
 import org.openmarkov.core.model.network.type.NetworkType;
 import org.openmarkov.gui.componentBuilder.JMenuItemBuilder;
-import org.openmarkov.gui.dialog.common.OkCancelHorizontalDialog;
+import org.openmarkov.gui.dialog.common.OkCancelDialog;
 import org.openmarkov.gui.dialog.costeffectiveness.CEPDialog;
 import org.openmarkov.gui.dialog.inference.common.InferenceOptionsDialog;
 import org.openmarkov.gui.dialog.inference.common.ScopeSelectorPanel;
@@ -55,11 +55,11 @@ public final class CostEffectivenessPlugin implements ToolPlugin {
                                                       .getPreResolutionEvidence();
         InferenceOptionsDialog inferenceOptionsDialog =
                 new InferenceOptionsDialog(probNet, parent, MulticriteriaOptions.Type.COST_EFFECTIVENESS);
-        if (inferenceOptionsDialog.getSelectedButton() != OkCancelHorizontalDialog.OK_BUTTON) {
+        if (inferenceOptionsDialog.getSelectedButton() != OkCancelDialog.OK_BUTTON) {
             return;
         }
         CostEffectivenessDialog costEffectivenessDialog = new CostEffectivenessDialog(parent, probNet, preResolutionEvidence);
-        if ((costEffectivenessDialog.requestData() != OkCancelHorizontalDialog.OK_BUTTON)) {
+        if ((costEffectivenessDialog.requestData() != OkCancelDialog.OK_BUTTON)) {
             return;
         }
         ScopeSelectorPanel scopeSelectorPanel = costEffectivenessDialog.getScopeSelectorPanel();
