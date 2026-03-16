@@ -55,11 +55,11 @@ public final class CostEffectivenessPlugin implements ToolPlugin {
                                                       .getPreResolutionEvidence();
         InferenceOptionsDialog inferenceOptionsDialog =
                 new InferenceOptionsDialog(probNet, parent, MulticriteriaOptions.Type.COST_EFFECTIVENESS);
-        if (inferenceOptionsDialog.getSelectedButton() != OkCancelDialog.OK_BUTTON) {
+        if (inferenceOptionsDialog.getSelectedOption() != OkCancelDialog.ChosenOption.Ok) {
             return;
         }
         CostEffectivenessDialog costEffectivenessDialog = new CostEffectivenessDialog(parent, probNet, preResolutionEvidence);
-        if ((costEffectivenessDialog.requestData() != OkCancelDialog.OK_BUTTON)) {
+        if ((costEffectivenessDialog.requestData() != OkCancelDialog.ChosenOption.Ok)) {
             return;
         }
         ScopeSelectorPanel scopeSelectorPanel = costEffectivenessDialog.getScopeSelectorPanel();

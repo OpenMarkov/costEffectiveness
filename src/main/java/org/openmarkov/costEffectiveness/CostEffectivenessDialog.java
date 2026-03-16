@@ -71,10 +71,10 @@ public class CostEffectivenessDialog extends OkCancelDialog {
 		pack();
 		repaint();
 	}
-
-	public int requestData() {
+    
+    public ChosenOption requestData() {
 		setVisible(true);
-		return selectedButton;
+        return getSelectedOption();
 	}
 
 	@Override protected boolean doOkClickBeforeHide() {
