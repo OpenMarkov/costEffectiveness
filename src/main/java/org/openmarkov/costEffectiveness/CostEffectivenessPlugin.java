@@ -52,6 +52,7 @@ public final class CostEffectivenessPlugin implements ToolPlugin {
                                                       .getMainPanelMenuAssistant()
                                                       .getCurrentNetworkPanel()
                                                       .getEditorPanel()
+                .getEvidenceManager()
                                                       .getPreResolutionEvidence();
         InferenceOptionsDialog inferenceOptionsDialog =
                 new InferenceOptionsDialog(probNet, parent, MulticriteriaOptions.Type.COST_EFFECTIVENESS);
