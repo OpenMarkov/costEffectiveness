@@ -45,7 +45,7 @@ public final class CostEffectivenessPlugin implements ToolPlugin {
                 .build();
     }
     
-    private static void onClick() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, ConstraintViolatedException, PotentialOperationException.DifferentSizesInPotentialsAndStates, NotSupportedOperationException {
+    private static void onClick() throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, ConstraintViolatedException, PotentialOperationException.DifferentSizesInPotentialsAndStates {
         JFrame parent = MainGUI.INSTANCE.mainPanel.getMainFrame();
         ProbNet probNet = MainPanel.getCurrentProbNet();
         EvidenceCase preResolutionEvidence = MainGUI.INSTANCE.mainPanel
