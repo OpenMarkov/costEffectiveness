@@ -5,7 +5,7 @@ import org.openmarkov.annotation_processing.localization_bindings.BindLocalizati
 import org.openmarkov.core.localize.spi.LocalizeResourcesProvider;
 
 
-@BindLocalizations(filePath = "costeffectiveness/localize/costeffectiveness_en.xml", fileIsDirectoryChild = true)
+//@BindLocalizations(filePath = "costeffectiveness/localize/costeffectiveness_en.xml", fileIsDirectoryChild = true)
 public class CostEffectivenessResourceBundleProvider implements LocalizeResourcesProvider {
 	
 	@Override
