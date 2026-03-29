@@ -24,16 +24,25 @@ import org.openmarkov.inference.algorithm.variableElimination.tasks.VECEAnalysis
 
 import javax.swing.*;
 
+/**
+ * Tool plugin that registers the cost-effectiveness analysis option in the Tools menu.
+ * Supports Influence Diagrams, Multi-criteria IDs, and Decision Analysis Networks.
+ */
 public final class CostEffectivenessPlugin implements ToolPlugin {
-    
+
     @Override public @NotNull ToolPluginGroup pluginGroup() {
         return ToolPluginGroup.ANALYSIS;
     }
-    
+
     @Override public int priorityInGroup() {
         return 0;
     }
-    
+
+    /**
+     * Checks whether this plugin should be enabled based on the presence of an open network.
+     *
+     * @return {@code true} if a network is currently open, {@code false} otherwise
+     */
     public boolean enabled() {
         return MainPanel.getCurrentProbNet() != null;
     }

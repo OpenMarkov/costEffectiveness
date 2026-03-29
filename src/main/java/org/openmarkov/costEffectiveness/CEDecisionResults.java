@@ -136,6 +136,20 @@ public class CEDecisionResults extends JDialog {
 	private JPanel frontierInterventionsTablePanel;
 	private boolean hasInterventions;
 
+	/**
+	 * Creates the cost-effectiveness decision results dialog, runs the CE analysis,
+	 * and displays the results in a tabbed pane (analysis table, CE plane, frontier).
+	 *
+	 * @param owner            the parent window
+	 * @param probNet          the probabilistic network being analyzed
+	 * @param evidenceCase     the evidence case (pre-resolution findings)
+	 * @param decisionVariable the decision variable to condition on
+	 * @throws NonProjectablePotentialException if a potential cannot be projected
+	 * @throws IncompatibleEvidenceException    if evidence is incompatible with the network
+	 * @throws NotEvaluableNetworkException.NotApplicableNetwork if the network cannot be evaluated
+	 * @throws NotEvaluableNetworkException.UnsatisfiedConstraints if network constraints are not met
+	 * @throws ConstraintViolatedException      if a constraint is violated
+	 */
 	public CEDecisionResults(Window owner, ProbNet probNet, EvidenceCase evidenceCase, Variable decisionVariable)
             throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, ConstraintViolatedException {
 		super(owner);
@@ -265,8 +279,9 @@ public class CEDecisionResults extends JDialog {
 	}
 
 	/**
-	 * Get the intervals panel with all the compact intervals
+	 * Get the intervals panel with all the compact intervals.
 	 *
+	 * @param analysisTab the tab for which to build the intervals panel
 	 * @return intervals panel with all the compact intervals
 	 */
 	public JScrollPane getIntervalsPanel(final AnalysisTab analysisTab) {
@@ -538,9 +553,10 @@ public class CEDecisionResults extends JDialog {
 	}
 
 	/**
-	 * Calculate the frontier interventions
+	 * Calculate the frontier interventions using dominance rules.
 	 *
-	 * @return List of frontier interventions
+	 * @param analysisTab the tab whose show/hide checkboxes determine selected interventions
+	 * @return list of non-dominated frontier interventions sorted by effectiveness
 	 */
 	public List<CEP> calculateFrontierInterventions(AnalysisTab analysisTab) {
 		ArrayList<CEP> remainingInterventions = new ArrayList<>();
@@ -629,9 +645,10 @@ public class CEDecisionResults extends JDialog {
 	}
 
 	/**
-	 * Get column names
+	 * Get column names for the specified analysis tab.
 	 *
-	 * @return column names
+	 * @param analysisTab the tab type determining which columns to include
+	 * @return array of column header names
 	 */
 	public String[] getColumns(AnalysisTab analysisTab) {
 		String[] columnNames;
@@ -658,9 +675,10 @@ public class CEDecisionResults extends JDialog {
 	}
 
 	/**
-	 * Build the right column with both panels
+	 * Build the right column with both the absolute/relative and show/hide panels.
 	 *
-	 * @return right column with both panels
+	 * @param analysisTab the tab for which to build the panel
+	 * @return right column panel combining absolute/relative and show/hide controls
 	 */
 	public JPanel getAbsRelShowHidePanel(AnalysisTab analysisTab) {
 		JPanel absRelShowHidePanel = new JPanel();
@@ -731,8 +749,9 @@ public class CEDecisionResults extends JDialog {
 	}
 
 	/**
-	 * Returns the scroll pane with the show/hide functionality
+	 * Returns the scroll pane with the show/hide functionality for decision states.
 	 *
+	 * @param analysisTab the tab for which to build the show/hide panel
 	 * @return scroll pane with the show/hide functionality
 	 */
 	public JScrollPane getShowHidePanel(final AnalysisTab analysisTab) {
@@ -772,7 +791,10 @@ public class CEDecisionResults extends JDialog {
 	}
 
 	/**
-	 * Action performed when a threshold has changed
+	 * Action performed when a threshold has changed. Updates the selected
+	 * min/max thresholds and refreshes all panels.
+	 *
+	 * @param analysisTab the tab where the threshold was changed
 	 */
 	private void thresholdChanged(AnalysisTab analysisTab) {
 		List<JRadioButton> currentTabRadioButtons = null;

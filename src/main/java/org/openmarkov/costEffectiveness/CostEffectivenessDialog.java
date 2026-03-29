@@ -31,9 +31,11 @@ public class CostEffectivenessDialog extends OkCancelDialog {
 	private EvidenceCase preResolutionEvidence;
 
 	/**
-	 * Creates a CostEffectivenessDialog for temporal evolution
+	 * Creates a CostEffectivenessDialog for temporal evolution.
 	 *
-	 * @param owner The parent of the dialog
+	 * @param owner                the parent window of the dialog
+	 * @param probNet              the probabilistic network to analyze
+	 * @param preResolutionEvidence the evidence before decision resolution
 	 */
 	public CostEffectivenessDialog(Window owner, ProbNet probNet, EvidenceCase preResolutionEvidence) {
 		super(owner);
@@ -72,6 +74,11 @@ public class CostEffectivenessDialog extends OkCancelDialog {
 		repaint();
 	}
     
+    /**
+     * Shows the dialog and waits for the user to confirm or cancel.
+     *
+     * @return the option chosen by the user (Ok or Cancel)
+     */
     public ChosenOption requestData() {
 		setVisible(true);
         return getSelectedOption();
@@ -87,6 +94,11 @@ public class CostEffectivenessDialog extends OkCancelDialog {
 		super.setTitle(title + " - " + FilenameUtils.getBaseName(netName));
 	}
 
+	/**
+	 * Returns the panel used to select the scope (decision or global) for the analysis.
+	 *
+	 * @return the scope selector panel
+	 */
 	public ScopeSelectorPanel getScopeSelectorPanel() {
 		return scopeSelectorPanel;
 	}
