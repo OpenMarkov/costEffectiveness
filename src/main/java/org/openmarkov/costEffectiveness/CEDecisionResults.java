@@ -36,6 +36,7 @@ import org.openmarkov.core.model.network.potential.StrategyTree;
 import org.openmarkov.gui.dialog.costeffectiveness.InterventionDialog;
 import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
 import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.inference.algorithm.variableElimination.operation.CEBaseOperations;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VECEAnalysis;
 
 import javax.swing.*;
@@ -49,7 +50,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
@@ -538,91 +538,51 @@ public class CEDecisionResults extends JDialog {
 	}
 
 	/**
-	 * Calculate the frontier interventions
+	 * Calculate the frontier interventions using the same algorithm as the GLOBAL CEA path
+	 * (CEBaseOperations.deterministicCEA), ensuring consistent results between both analysis modes.
 	 *
-	 * @return List of frontier interventions
+	 * @return List of frontier interventions (per-decision-state CEPs, in frontier order)
 	 */
 	public List<CEP> calculateFrontierInterventions(AnalysisTab analysisTab) {
-		ArrayList<CEP> remainingInterventions = new ArrayList<>();
-		ArrayList<CEP> frontierInterventions = new ArrayList<>();
-
-		// Get the selected interventions
+		// Collect selected intervention indices
+		List<Integer> selectedIndices = new ArrayList<>();
 		for (int cepIndex = 0; cepIndex < cepsForDecision.length; cepIndex++) {
-			if (analysisTab == AnalysisTab.CEPLANE) {
-				// If the intervention is selected add to remaining interventions
-				if (cePlaneShowHideCheckBoxes.get(cepIndex).isSelected()) {
-					remainingInterventions.add(cepsForDecision[cepIndex]);
-				}
-			} else if (analysisTab == AnalysisTab.FRONTIER_INTERVENTIONS) {
-				// If the intervention is selected add to remaining interventions
-				if (frontierInterventionsShowHideCheckBoxes.get(cepIndex).isSelected()) {
-					remainingInterventions.add(cepsForDecision[cepIndex]);
-				}
+			boolean selected = (analysisTab == AnalysisTab.CEPLANE)
+					? cePlaneShowHideCheckBoxes.get(cepIndex).isSelected()
+					: frontierInterventionsShowHideCheckBoxes.get(cepIndex).isSelected();
+			if (selected) {
+				selectedIndices.add(cepIndex);
 			}
 		}
-        
-        if (remainingInterventions.isEmpty()) {
-			return frontierInterventions;
+
+		if (selectedIndices.isEmpty()) {
+			return new ArrayList<>();
 		}
 
-		// Get the cheapest intervention
-		CEP cheapestIntervention = remainingInterventions.get(0);
-		for (int i = 1; i < remainingInterventions.size(); i++) {
-			CEP intervention = remainingInterventions.get(i);
-			if ((intervention.getCost(meanThreshold) < cheapestIntervention.getCost(meanThreshold)) || (
-					intervention.getCost(meanThreshold) == cheapestIntervention.getCost(meanThreshold)
-							&& intervention.getEffectiveness(meanThreshold) > cheapestIntervention
-							.getEffectiveness(meanThreshold)
-			)) {
-				cheapestIntervention = intervention;
-			}
+		// Extract costs, effectivenesses, and strategy trees at meanThreshold
+		int n = selectedIndices.size();
+		double[] costs = new double[n];
+		double[] effectivenesses = new double[n];
+		StrategyTree[] strategyTrees = new StrategyTree[n];
+		for (int i = 0; i < n; i++) {
+			int idx = selectedIndices.get(i);
+			costs[i] = cepsForDecision[idx].getCost(meanThreshold);
+			effectivenesses[i] = cepsForDecision[idx].getEffectiveness(meanThreshold);
+			strategyTrees[i] = new StrategyTree(decisionVariable, decisionVariable.getStates()[idx]);
 		}
-		// Add the cheapest intervention to the frontier interventions list and remove from auxiliar list
-		frontierInterventions.add(cheapestIntervention);
-		remainingInterventions.remove(cheapestIntervention);
 
-		while (!remainingInterventions.isEmpty()) {
-			// Remove interventions with minor effectiveness
-			List<CEP> toRemove = new ArrayList<>();
-			for (CEP intervention : remainingInterventions) {
-				if (intervention.getEffectiveness(meanThreshold) <= cheapestIntervention
-						.getEffectiveness(meanThreshold)) {
-					toRemove.add(intervention);
+		// Delegate to the same deterministic CEA algorithm used by the GLOBAL path
+		CEP resultCEP = CEBaseOperations.deterministicCEA(strategyTrees, costs, effectivenesses);
+
+		// Map frontier interventions back to original per-decision-state CEPs
+		List<CEP> frontierInterventions = new ArrayList<>();
+		for (int interval = 0; interval < resultCEP.getNumIntervals(); interval++) {
+			StrategyTree intervention = resultCEP.getIntervention(interval);
+			for (int j = 0; j < n; j++) {
+				if (intervention == strategyTrees[j]) {
+					frontierInterventions.add(cepsForDecision[selectedIndices.get(j)]);
+					break;
 				}
-			}
-			for (CEP intervention : toRemove) {
-				remainingInterventions.remove(intervention);
-			}
-
-			// Get smallest ICER from minor intervention
-			double smallestICER = Double.POSITIVE_INFINITY;
-			CEP candidateintervention = null;
-			for (CEP intervention : remainingInterventions) {
-				double costDiff = (
-						BigDecimal.valueOf(intervention.getCost(meanThreshold)).
-								subtract(BigDecimal.valueOf(cheapestIntervention.getCost(meanThreshold)))
-				).doubleValue();
-				double effDiff = (
-						BigDecimal.valueOf(intervention.getEffectiveness(meanThreshold)).
-								subtract(BigDecimal.valueOf(cheapestIntervention.getEffectiveness(meanThreshold)))
-				).doubleValue();
-				//                double ICER = (BigDecimal.valueOf(costDiff).divide(BigDecimal.valueOf(effDiff))).doubleValue();
-				double ICER = costDiff / effDiff;
-
-				if (ICER < smallestICER) {
-					candidateintervention = intervention;
-					smallestICER = ICER;
-				} else if (ICER == smallestICER && (
-						intervention.getEffectiveness(meanThreshold) < candidateintervention
-								.getEffectiveness(meanThreshold)
-				)) {
-					candidateintervention = intervention;
-				}
-			}
-			if (!remainingInterventions.isEmpty()) {
-				frontierInterventions.add(candidateintervention);
-				remainingInterventions.remove(candidateintervention);
-				cheapestIntervention = candidateintervention;
 			}
 		}
 		return frontierInterventions;
