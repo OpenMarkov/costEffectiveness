@@ -72,7 +72,7 @@ public class CEDecisionResults extends JDialog {
     private static final int COLUMN_INTERVENTION = 3;
     private static final int COLUMN_ICER = 3;
     private static final String CLICKABLE_COLUMN_COLOR = "#DDF5D8";
-    private static final int DEFAULT_NUM_SIGNIFICANT_NUMBERS = 5;
+    private static final int DEFAULT_NUM_SIGNIFICANT_NUMBERS = 6;
 	/**
 	 * ProbNet
 	 */
