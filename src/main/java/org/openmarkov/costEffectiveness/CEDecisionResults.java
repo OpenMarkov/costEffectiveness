@@ -36,6 +36,7 @@ import org.openmarkov.core.model.network.potential.StrategyTree;
 import org.openmarkov.gui.dialog.costeffectiveness.InterventionDialog;
 import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
 import org.openmarkov.core.localize.StringDatabase;
+import org.openmarkov.inference.algorithm.variableElimination.operation.CEBaseOperations;
 import org.openmarkov.inference.algorithm.variableElimination.tasks.VECEAnalysis;
 
 import javax.swing.*;
@@ -49,7 +50,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
@@ -72,7 +72,7 @@ public class CEDecisionResults extends JDialog {
     private static final int COLUMN_INTERVENTION = 3;
     private static final int COLUMN_ICER = 3;
     private static final String CLICKABLE_COLUMN_COLOR = "#DDF5D8";
-    private static final int DEFAULT_NUM_SIGNIFICANT_NUMBERS = 5;
+    private static final int DEFAULT_NUM_SIGNIFICANT_NUMBERS = 6;
 	/**
 	 * ProbNet
 	 */
@@ -136,20 +136,6 @@ public class CEDecisionResults extends JDialog {
 	private JPanel frontierInterventionsTablePanel;
 	private boolean hasInterventions;
 
-	/**
-	 * Creates the cost-effectiveness decision results dialog, runs the CE analysis,
-	 * and displays the results in a tabbed pane (analysis table, CE plane, frontier).
-	 *
-	 * @param owner            the parent window
-	 * @param probNet          the probabilistic network being analyzed
-	 * @param evidenceCase     the evidence case (pre-resolution findings)
-	 * @param decisionVariable the decision variable to condition on
-	 * @throws NonProjectablePotentialException if a potential cannot be projected
-	 * @throws IncompatibleEvidenceException    if evidence is incompatible with the network
-	 * @throws NotEvaluableNetworkException.NotApplicableNetwork if the network cannot be evaluated
-	 * @throws NotEvaluableNetworkException.UnsatisfiedConstraints if network constraints are not met
-	 * @throws ConstraintViolatedException      if a constraint is violated
-	 */
 	public CEDecisionResults(Window owner, ProbNet probNet, EvidenceCase evidenceCase, Variable decisionVariable)
             throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, ConstraintViolatedException {
 		super(owner);
@@ -279,9 +265,8 @@ public class CEDecisionResults extends JDialog {
 	}
 
 	/**
-	 * Get the intervals panel with all the compact intervals.
+	 * Get the intervals panel with all the compact intervals
 	 *
-	 * @param analysisTab the tab for which to build the intervals panel
 	 * @return intervals panel with all the compact intervals
 	 */
 	public JScrollPane getIntervalsPanel(final AnalysisTab analysisTab) {
@@ -553,102 +538,60 @@ public class CEDecisionResults extends JDialog {
 	}
 
 	/**
-	 * Calculate the frontier interventions using dominance rules.
+	 * Calculate the frontier interventions using the same algorithm as the GLOBAL CEA path
+	 * (CEBaseOperations.deterministicCEA), ensuring consistent results between both analysis modes.
 	 *
-	 * @param analysisTab the tab whose show/hide checkboxes determine selected interventions
-	 * @return list of non-dominated frontier interventions sorted by effectiveness
+	 * @return List of frontier interventions (per-decision-state CEPs, in frontier order)
 	 */
 	public List<CEP> calculateFrontierInterventions(AnalysisTab analysisTab) {
-		ArrayList<CEP> remainingInterventions = new ArrayList<>();
-		ArrayList<CEP> frontierInterventions = new ArrayList<>();
-
-		// Get the selected interventions
+		// Collect selected intervention indices
+		List<Integer> selectedIndices = new ArrayList<>();
 		for (int cepIndex = 0; cepIndex < cepsForDecision.length; cepIndex++) {
-			if (analysisTab == AnalysisTab.CEPLANE) {
-				// If the intervention is selected add to remaining interventions
-				if (cePlaneShowHideCheckBoxes.get(cepIndex).isSelected()) {
-					remainingInterventions.add(cepsForDecision[cepIndex]);
-				}
-			} else if (analysisTab == AnalysisTab.FRONTIER_INTERVENTIONS) {
-				// If the intervention is selected add to remaining interventions
-				if (frontierInterventionsShowHideCheckBoxes.get(cepIndex).isSelected()) {
-					remainingInterventions.add(cepsForDecision[cepIndex]);
-				}
+			boolean selected = (analysisTab == AnalysisTab.CEPLANE)
+					? cePlaneShowHideCheckBoxes.get(cepIndex).isSelected()
+					: frontierInterventionsShowHideCheckBoxes.get(cepIndex).isSelected();
+			if (selected) {
+				selectedIndices.add(cepIndex);
 			}
 		}
-        
-        if (remainingInterventions.isEmpty()) {
-			return frontierInterventions;
+
+		if (selectedIndices.isEmpty()) {
+			return new ArrayList<>();
 		}
 
-		// Get the cheapest intervention
-		CEP cheapestIntervention = remainingInterventions.get(0);
-		for (int i = 1; i < remainingInterventions.size(); i++) {
-			CEP intervention = remainingInterventions.get(i);
-			if ((intervention.getCost(meanThreshold) < cheapestIntervention.getCost(meanThreshold)) || (
-					intervention.getCost(meanThreshold) == cheapestIntervention.getCost(meanThreshold)
-							&& intervention.getEffectiveness(meanThreshold) > cheapestIntervention
-							.getEffectiveness(meanThreshold)
-			)) {
-				cheapestIntervention = intervention;
-			}
+		// Extract costs, effectivenesses, and strategy trees at meanThreshold
+		int n = selectedIndices.size();
+		double[] costs = new double[n];
+		double[] effectivenesses = new double[n];
+		StrategyTree[] strategyTrees = new StrategyTree[n];
+		for (int i = 0; i < n; i++) {
+			int idx = selectedIndices.get(i);
+			costs[i] = cepsForDecision[idx].getCost(meanThreshold);
+			effectivenesses[i] = cepsForDecision[idx].getEffectiveness(meanThreshold);
+			strategyTrees[i] = new StrategyTree(decisionVariable, decisionVariable.getStates()[idx]);
 		}
-		// Add the cheapest intervention to the frontier interventions list and remove from auxiliar list
-		frontierInterventions.add(cheapestIntervention);
-		remainingInterventions.remove(cheapestIntervention);
 
-		while (!remainingInterventions.isEmpty()) {
-			// Remove interventions with minor effectiveness
-			List<CEP> toRemove = new ArrayList<>();
-			for (CEP intervention : remainingInterventions) {
-				if (intervention.getEffectiveness(meanThreshold) <= cheapestIntervention
-						.getEffectiveness(meanThreshold)) {
-					toRemove.add(intervention);
+		// Delegate to the same deterministic CEA algorithm used by the GLOBAL path
+		CEP resultCEP = CEBaseOperations.deterministicCEA(strategyTrees, costs, effectivenesses);
+
+		// Map frontier interventions back to original per-decision-state CEPs
+		List<CEP> frontierInterventions = new ArrayList<>();
+		for (int interval = 0; interval < resultCEP.getNumIntervals(); interval++) {
+			StrategyTree intervention = resultCEP.getIntervention(interval);
+			for (int j = 0; j < n; j++) {
+				if (intervention == strategyTrees[j]) {
+					frontierInterventions.add(cepsForDecision[selectedIndices.get(j)]);
+					break;
 				}
-			}
-			for (CEP intervention : toRemove) {
-				remainingInterventions.remove(intervention);
-			}
-
-			// Get smallest ICER from minor intervention
-			double smallestICER = Double.POSITIVE_INFINITY;
-			CEP candidateintervention = null;
-			for (CEP intervention : remainingInterventions) {
-				double costDiff = (
-						BigDecimal.valueOf(intervention.getCost(meanThreshold)).
-								subtract(BigDecimal.valueOf(cheapestIntervention.getCost(meanThreshold)))
-				).doubleValue();
-				double effDiff = (
-						BigDecimal.valueOf(intervention.getEffectiveness(meanThreshold)).
-								subtract(BigDecimal.valueOf(cheapestIntervention.getEffectiveness(meanThreshold)))
-				).doubleValue();
-				//                double ICER = (BigDecimal.valueOf(costDiff).divide(BigDecimal.valueOf(effDiff))).doubleValue();
-				double ICER = costDiff / effDiff;
-
-				if (ICER < smallestICER) {
-					candidateintervention = intervention;
-					smallestICER = ICER;
-				} else if (ICER == smallestICER && (
-						intervention.getEffectiveness(meanThreshold) < candidateintervention
-								.getEffectiveness(meanThreshold)
-				)) {
-					candidateintervention = intervention;
-				}
-			}
-			if (!remainingInterventions.isEmpty()) {
-				frontierInterventions.add(candidateintervention);
-				remainingInterventions.remove(candidateintervention);
-				cheapestIntervention = candidateintervention;
 			}
 		}
 		return frontierInterventions;
 	}
 
 	/**
-	 * Get column names for the specified analysis tab.
+	 * Get column names
 	 *
-	 * @param analysisTab the tab type determining which columns to include
-	 * @return array of column header names
+	 * @return column names
 	 */
 	public String[] getColumns(AnalysisTab analysisTab) {
 		String[] columnNames;
@@ -675,10 +618,9 @@ public class CEDecisionResults extends JDialog {
 	}
 
 	/**
-	 * Build the right column with both the absolute/relative and show/hide panels.
+	 * Build the right column with both panels
 	 *
-	 * @param analysisTab the tab for which to build the panel
-	 * @return right column panel combining absolute/relative and show/hide controls
+	 * @return right column with both panels
 	 */
 	public JPanel getAbsRelShowHidePanel(AnalysisTab analysisTab) {
 		JPanel absRelShowHidePanel = new JPanel();
@@ -749,9 +691,8 @@ public class CEDecisionResults extends JDialog {
 	}
 
 	/**
-	 * Returns the scroll pane with the show/hide functionality for decision states.
+	 * Returns the scroll pane with the show/hide functionality
 	 *
-	 * @param analysisTab the tab for which to build the show/hide panel
 	 * @return scroll pane with the show/hide functionality
 	 */
 	public JScrollPane getShowHidePanel(final AnalysisTab analysisTab) {
@@ -791,10 +732,7 @@ public class CEDecisionResults extends JDialog {
 	}
 
 	/**
-	 * Action performed when a threshold has changed. Updates the selected
-	 * min/max thresholds and refreshes all panels.
-	 *
-	 * @param analysisTab the tab where the threshold was changed
+	 * Action performed when a threshold has changed
 	 */
 	private void thresholdChanged(AnalysisTab analysisTab) {
 		List<JRadioButton> currentTabRadioButtons = null;
