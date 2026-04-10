@@ -33,6 +33,7 @@ import org.openmarkov.core.model.network.Util;
 import org.openmarkov.core.model.network.Variable;
 import org.openmarkov.core.model.network.potential.GTablePotential;
 import org.openmarkov.core.model.network.potential.StrategyTree;
+import org.openmarkov.gui.configuration.GUIColors;
 import org.openmarkov.gui.dialog.costeffectiveness.InterventionDialog;
 import org.openmarkov.gui.loader.element.OpenMarkovLogoIcon;
 import org.openmarkov.core.localize.StringDatabase;
@@ -828,7 +829,7 @@ public class CEDecisionResults extends JDialog {
 		// Create the line data, renderer, and axis
 		XYDataset collection2 = getLineFrontierInterventionsData();
 		XYItemRenderer renderer2 = new XYLineAndShapeRenderer(true, false);   // Lines only
-		renderer2.setSeriesPaint(0, Color.RED);
+        renderer2.setSeriesPaint(0, GUIColors.CostEffectiveness.SERIES_COLOR.getColor());
 		BasicStroke stroke = new BasicStroke();
 		renderer2.setSeriesStroke(0,
 				new BasicStroke(2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1.0f, new float[] { 6.0f, 6.0f },
@@ -944,5 +945,5 @@ public class CEDecisionResults extends JDialog {
 	private enum AnalysisTab {
 		ANALYSIS, CEPLANE, FRONTIER_INTERVENTIONS
 	}
-
+ 
 }
