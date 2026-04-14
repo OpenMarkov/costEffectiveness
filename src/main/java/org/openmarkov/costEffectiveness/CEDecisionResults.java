@@ -138,7 +138,7 @@ public class CEDecisionResults extends JDialog {
 	private boolean hasInterventions;
 
 	public CEDecisionResults(Window owner, ProbNet probNet, EvidenceCase evidenceCase, Variable decisionVariable)
-            throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, NotEvaluableNetworkException.UnsatisfiedConstraints, ConstraintViolatedException {
+            throws NonProjectablePotentialException, IncompatibleEvidenceException, NotEvaluableNetworkException.NotApplicableNetwork, ConstraintViolatedException {
 		super(owner);
 		this.probNet = probNet;
 		this.decisionVariable = decisionVariable;
