@@ -59,7 +59,7 @@ public final class CostEffectivenessPlugin implements ToolPlugin {
         ProbNet probNet = MainPanel.getCurrentProbNet();
         EvidenceCase preResolutionEvidence = MainGUI.INSTANCE.mainPanel
                                                       .getMainPanelMenuAssistant()
-                                                      .getCurrentNetworkPanel()
+                                                      .getCurrentNetworkEditorPanel()
                                                       .getEditorPanel()
                 .getEvidenceManager()
                                                       .getPreResolutionEvidence();
