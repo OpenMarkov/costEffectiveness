@@ -4,18 +4,18 @@
 
     <parent>
         <groupId>org.openmarkov</groupId>
-        <artifactId>org.openmarkov</artifactId>
+        <artifactId>root</artifactId>
         <version>0.3.0-SNAPSHOT</version>
-        <relativePath>../org.openmarkov</relativePath>
+        <relativePath>../root</relativePath>
     </parent>
 
-    <artifactId>org.openmarkov.costEffectiveness</artifactId>
+    <artifactId>costEffectiveness</artifactId>
     <version>0.3.0-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
             <groupId>org.openmarkov</groupId>
-            <artifactId>org.openmarkov.gui</artifactId>
+            <artifactId>gui</artifactId>
             <version>0.3.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
