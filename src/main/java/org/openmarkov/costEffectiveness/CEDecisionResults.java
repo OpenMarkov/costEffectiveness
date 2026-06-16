@@ -829,7 +829,7 @@ public class CEDecisionResults extends JDialog {
 		// Create the line data, renderer, and axis
 		XYDataset collection2 = getLineFrontierInterventionsData();
 		XYItemRenderer renderer2 = new XYLineAndShapeRenderer(true, false);   // Lines only
-        renderer2.setSeriesPaint(0, GUIColors.CostEffectiveness.SERIES_COLOR.getColor());
+        renderer2.setSeriesPaint(0, GUIColors.CostEffectiveness.WTP_SLOPE.getColor());
 		BasicStroke stroke = new BasicStroke();
 		renderer2.setSeriesStroke(0,
 				new BasicStroke(2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1.0f, new float[] { 6.0f, 6.0f },
